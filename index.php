@@ -1,5 +1,5 @@
 <!DOCTYPE html">
-<html lang="en" data-theme="light">
+<html lang="en">
   <head>
     <?php
     include('head_content.php')
