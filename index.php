@@ -1,40 +1,11 @@
 <!DOCTYPE html">
 <html lang="en" data-theme="light">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Skill Pro</title>
-
-    <link rel="stylesheet" href="Styles/styles.css">
-    <link rel="stylesheet" href="Styles/Nav.css" />
-    <link rel="stylesheet" href="Styles/allCourses.css">
-
-    <!-- tailwind and daisy UI -->
-
-    <link
-      href="https://cdn.jsdelivr.net/npm/daisyui@4.12.13/dist/full.min.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- font awesome cdn -->
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- tailwind custom color -->
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              clifford: "#da373d",
-            },
-          },
-        },
-      };
-    </script>
-  </head>
+    <?php
+    include('head_content.php')
+    
+    ?>
+     </head>
   <body>
     <header>
       <!-- Navigation -->
@@ -2709,92 +2680,13 @@
   
   </main>
 
+   <?php
+   include('footer.php')
    
+   
+   ?>
   
-  <footer class="mt-11 grid lg:grid-cols-4 bg-black text-white text-base-content p-16">
-
-    <nav>
-     <img class="w-1/4" src="Images/logo/skillPro logo.jpg" alt="">
-      <h6>Online Live Skill Development Platform</h6>
-      <p class="mt-2">Download SkillPro App</p>
-      <div class=" flex gap-3 justify-start items-start mt-2">
-
-        <div>
-          <a href=""><i class="fa-brands fa-google-play"></i></a>
-        </div>
-        <div>
-         <a href=""> <i class="fa-brands fa-windows"></i></a>
-        </div>
-
-        <div>
-          <a href=""><i class="fa-brands fa-app-store-ios"></i></a>
-        </div>
-
-      </div>
-
-     <div class="mt-2">
-      <p>Stay connected with the community</p>
-      <div class=" flex gap-3 justify-start items-start mt-1">
-
-        <div>
-          <a href=""><i class="fa-brands fa-facebook"></i></a>
-        </div>
-        <div>
-         <a href=""> <i class="fa-brands fa-instagram"></i></a>
-        </div>
-
-        <div>
-          <a href=""><i class="fa-brands fa-youtube"></i></a>
-        </div>
-        <div>
-          <a href=""><i class="fa-brands fa-tiktok"></i></a>
-        </div>
-        <div>
-          <a href=""><i class="fa-brands fa-linkedin"></i></i></a>
-        </div>
-     </div>
-
-      </div>
-    </nav>
-    
-    <nav >
-      <h6 class="footer-title">Quick Link</h6>
-      <div class="flex flex-col">
-        <a class="link link-hover">Upcoming Live Batch</a>
-      <a class="link link-hover">Free Courses</a>
-      <a class="link link-hover">Live Workshop</a>
-      <a class="link link-hover">Blog</a>
-  </div>
-    </nav>
-
-
-    <nav>
-      <h6 class="footer-title">Contacts</h6>
-
-      <div class="flex flex-col">
-       <div>
-        <i class="fa-regular fa-envelope"></i>
-        <a class="link link-hover" href="mailto:example@example.com">karimul.hassan@northsouth.edu</a>
-       </div>
-      <div>
-        <i class="fa-solid fa-location-dot"></i>
-        <a class="link link-hover" href="https://maps.app.goo.gl/7WokW4KdtBeT5sBZ9" target="_blank">
-          View on Google Maps
-      </a>
-      </div>
-      
-      </div>
-      
-    </nav>
-
-
-    <nav class="flex flex-col">
-      <h6 class="footer-title">Company</h6>
-      <a class="link link-hover">About Us</a>
-      <a class="link link-hover">Privacy Policy</a>
-      <a class="link link-hover">Terms And Conditions</a>
- </nav>
-  </footer>
+ 
   </body>
 </html>
 

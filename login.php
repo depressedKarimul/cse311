@@ -128,29 +128,25 @@ $conn->close();
             <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md font-bold  hover:bg-black">Log in</button>
           </div>
           <div class="text-center">
-            <a href="#" class="text-blue-600 hover:underline">Forgotten password?</a>
+            <a href="Forgotten_password.php" class="text-blue-600 hover:underline">Forgotten password?</a>
           </div>
           <hr class="my-4">
           <div class="text-center">
             <button class="w-full bg-blue-500 text-white py-2 rounded-md font-bold hover:bg-black"><a href="Register.php">Create new account</a> </button>
           </div>
+          <!-- Error Message -->
+<?php if (!empty($error)): ?>
+<div class="mt-4 text-red-500 text-center">
+  <p><?= htmlspecialchars($error) ?></p>
+</div>
+<?php endif; ?>
         </form>
 
       </div>
     </div>
   </div>
 
-<!-- Error Message -->
-<?php if (!empty($error)): ?>
-<div class="mt-4 text-red-500 text-center">
-  <p><?= htmlspecialchars($error) ?></p>
-</div>
-<?php endif; ?>
 
-
-
-
-    
 
 
 </body>
