@@ -38,6 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       try {
           mysqli_query($conn, $sql);
           $successMessage = "You are now registered!";
+
+          header("Location: login.php");
       } catch (mysqli_sql_exception $e) {
           $errors[] = "Error: Could not register user. Please try again.";
       }
@@ -52,11 +54,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillPro Registration</title>
+    <title>SkillPro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            background-image: url('https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-image: url('https://images.unsplash.com/photo-1689443111130-6e9c7dfd8f9e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
@@ -69,27 +71,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="space-y-6">
             <div>
                 <label for="firstName" class="block text-white font-medium">First Name</label>
-                <input type="text" name="firstName" id="firstName" required
+                <input type="text" name="firstName" id="firstName" 
                     class="w-full px-4 py-3 border border-white bg-transparent text-white rounded-md placeholder-gray-300 focus:outline-none focus:ring focus:ring-white">
             </div>
             <div>
                 <label for="lastName" class="block text-white font-medium">Last Name</label>
-                <input type="text" name="lastName" id="lastName" required
+                <input type="text" name="lastName" id="lastName" 
                     class="w-full px-4 py-3 border border-white bg-transparent text-white rounded-md placeholder-gray-300 focus:outline-none focus:ring focus:ring-white">
             </div>
             <div>
                 <label for="email" class="block text-white font-medium">Email</label>
-                <input type="email" name="email" id="email" required
+                <input type="email" name="email" id="email"
                     class="w-full px-4 py-3 border border-white bg-transparent text-white rounded-md placeholder-gray-300 focus:outline-none focus:ring focus:ring-white">
             </div>
             <div>
                 <label for="password" class="block text-white font-medium">Password</label>
-                <input type="password" name="password" id="password" required
+                <input type="password" name="password" id="password" 
                     class="w-full px-4 py-3 border border-white bg-transparent text-white rounded-md placeholder-gray-300 focus:outline-none focus:ring focus:ring-white">
             </div>
             <div>
                 <label for="role" class="block text-white font-medium">Role</label>
-                <select name="role" id="role" required
+                <select name="role" id="role" 
                     class="w-full px-4 py-3 border border-white bg-transparent text-white rounded-md focus:outline-none focus:ring focus:ring-white">
                     <option value="" class="bg-gray-900">Select Role</option>
                     <option value="student" class="bg-gray-900">Student</option>
