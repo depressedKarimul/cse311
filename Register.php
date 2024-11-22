@@ -1,6 +1,7 @@
 <?php
 include("database.php");
 $errors = [];
+$successMessage = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize input data
@@ -9,9 +10,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
     $password = $_POST["password"];
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // Hash the password securely
-    $profile_pic = $_POST["profile_pic"];
     $bio = filter_input(INPUT_POST, "bio", FILTER_SANITIZE_SPECIAL_CHARS);
     $role = filter_input(INPUT_POST, "role", FILTER_SANITIZE_SPECIAL_CHARS);
+
+    // Handle file upload
+    $profilePic = "";
+    if (isset($_FILES["profile_pic"]) && $_FILES["profile_pic"]["error"] == 0) {
+        $uploadDir = "C:/xampp/htdocs/cse311/images/"; // Ensure this folder exists
+        $fileName = basename($_FILES["profile_pic"]["name"]);
+        $targetPath = $uploadDir . $fileName;
+
+        // Check file type
+        $allowedTypes = ["jpg", "jpeg", "png", "gif"];
+        $fileType = strtolower(pathinfo($targetPath, PATHINFO_EXTENSION));
+
+        if (in_array($fileType, $allowedTypes)) {
+            if (move_uploaded_file($_FILES["profile_pic"]["tmp_name"], $targetPath)) {
+                $profilePic = "images/" . $fileName; // Save relative path
+            } else {
+                $errors[] = "Failed to upload profile picture.";
+            }
+        } else {
+            $errors[] = "Invalid file type. Only JPG, JPEG, PNG, and GIF are allowed.";
+        }
+    }
 
     // Validate input fields
     if (empty($firstName)) $errors[] = "First Name is required.";
@@ -32,22 +54,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // If no errors, proceed with the database insertion
     if (empty($errors)) {
         $sql = "INSERT INTO User (firstName, lastName, email, password, role, profile_pic, bio) 
-                VALUES ('$firstName','$lastName','$email','$hashedPassword', '$role', '$profile_pic', '$bio')";
-      $successMessage = ""; // Initialize variable for success message
+                VALUES ('$firstName','$lastName','$email','$hashedPassword', '$role', '$profilePic', '$bio')";
 
-      try {
-          mysqli_query($conn, $sql);
-          $successMessage = "You are now registered!";
-
-          header("Location: login.php");
-      } catch (mysqli_sql_exception $e) {
-          $errors[] = "Error: Could not register user. Please try again.";
-      }
-      
+        try {
+            mysqli_query($conn, $sql);
+            $successMessage = "You are now registered!";
+            header("Location: login.php");
+            exit();
+        } catch (mysqli_sql_exception $e) {
+            $errors[] = "Error: Could not register user. Please try again.";
+        }
     }
+
     mysqli_close($conn);
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -68,7 +90,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body class="flex items-center justify-center min-h-screen">
     <div class="w-full max-w-3xl bg-blue-950 bg-opacity-70 border-2 border-white rounded-lg shadow-lg p-8">
         <h2 class="text-3xl font-bold text-center text-white mb-6">User Registration</h2>
-        <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="space-y-6">
+        <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data" class="space-y-6">
+
             <div>
                 <label for="firstName" class="block text-white font-medium">First Name</label>
                 <input type="text" name="firstName" id="firstName" 
