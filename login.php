@@ -16,8 +16,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
         if (password_verify($password, $user['password'])) {
+            // Store user details in session
             $_SESSION['user_id'] = $user['user_id']; // Correct key
             $_SESSION['role'] = $user['role'];
+            $_SESSION['profile_pic'] = $user['profile_pic']; // Store profile image path
 
             switch ($user['role']) {
                 case 'instructor':
@@ -42,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 $conn->close();
 ?>
+
 
 
 

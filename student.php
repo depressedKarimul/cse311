@@ -1,4 +1,15 @@
+<?php
+session_start();
 
+// Ensure the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Fetch the profile picture from session
+$profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'default_profile.jpg'; // Set a default image if not available
+?>
 
 
 <!DOCTYPE html>
@@ -221,15 +232,13 @@
             </ul>
           </div>
 
-          <div class="relative navbar-end">
+          
   <!-- Profile Image Button -->
-  <button id="profile-btn" class="rounded-full w-10 h-10 mr-10 overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500">
-    <img
-    src="<?php echo htmlspecialchars($profilePic); ?>" 
-      alt="Profile"
-      class="w-full h-full object-cover"
-    />
-  </button>
+  <div class="navbar-end">
+                <!-- Profile Image Button -->
+                <button id="profile-btn" class="rounded-full w-10 h-10 mr-10 overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <img src="<?php echo htmlspecialchars($profilePic); ?>" alt="Profile" class="w-full h-full object-cover" />
+                </button>
 
   <!-- Dropdown Menu -->
   <div
@@ -241,7 +250,7 @@
         <a href="#" class="block px-4 py-2 hover:bg-[#01797a]">Profile</a>
       </li>
       <li>
-        <a href="#" class="block px-4 py-2 hover:bg-[#01797a]">Settings</a>
+        <a href="student_settings.php" class="block px-4 py-2 hover:bg-[#01797a]">Settings</a>
       </li>
       <li>
         <a href="logout.php" class="block px-4 py-2 text-red-500 hover:bg-[#01797a]">Log Out</a>
