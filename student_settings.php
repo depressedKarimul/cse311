@@ -120,10 +120,19 @@ $conn->close();
             </div>
 
             <div>
-                <button type="submit" name="submit" class="w-full px-6 py-3 text-lg font-medium text-blue-500 bg-white rounded-md hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300">
+                <button type="submit" name="submit" class="w-full px-6 py-3 text-lg font-medium text-blue-500 bg-white rounded-md hover:bg-[#6dff3a] hover:text-white focus:outline-none focus:ring focus:ring-blue-300">
                     Update
                 </button>
             </div>
+
+            <div>
+    <form action="delete_account.php" method="POST">
+        <button type="submit" name="submit" class="w-full px-6 py-3 text-lg font-medium text-[white] bg-[#ff3701] rounded-md hover:bg-[black] hover:text-[red] focus:outline-none focus:ring focus:ring-blue-300 mt-2">
+            <a href="delete_account.php">Permanently Delete Your SkillPro Account</a>
+        </button>
+    </form>
+</div>
+
         </form>
     </div>
 </body>
