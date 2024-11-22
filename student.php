@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -103,7 +106,7 @@
 
         <script>
           document
-            .getElementById("search-btn")
+          .getElementById("search-btn")
             .addEventListener("click", function () {
               const searchInput = document.getElementById("search-input");
               searchInput.classList.toggle("hidden");
@@ -222,7 +225,7 @@
   <!-- Profile Image Button -->
   <button id="profile-btn" class="rounded-full w-10 h-10 mr-10 overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500">
     <img
-      src="https://via.placeholder.com/150" 
+    src="<?php echo htmlspecialchars($profilePic); ?>" 
       alt="Profile"
       class="w-full h-full object-cover"
     />
@@ -231,23 +234,27 @@
   <!-- Dropdown Menu -->
   <div
     id="dropdown-menu"
-    class="hidden absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-10"
+    class="hidden absolute right-0 mt-2 w-40 bg-[#021e3b] rounded-md shadow-lg z-10"
   >
-    <ul class="py-2 text-sm text-gray-700">
+    <ul class="py-2 text-sm text-gray-100">
       <li>
-        <a href="#" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
+        <a href="#" class="block px-4 py-2 hover:bg-[#01797a]">Profile</a>
       </li>
       <li>
-        <a href="#" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+        <a href="#" class="block px-4 py-2 hover:bg-[#01797a]">Settings</a>
       </li>
       <li>
-        <a href="#" class="block px-4 py-2 text-red-500 hover:bg-gray-100">Log Out</a>
+        <a href="logout.php" class="block px-4 py-2 text-red-500 hover:bg-[#01797a]">Log Out</a>
       </li>
+
+
+ 
+
     </ul>
   </div>
 </div>
 
-<!-- Script to Toggle Menu -->
+
 
         </div>
       </nav>

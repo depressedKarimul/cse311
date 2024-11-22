@@ -1,12 +1,12 @@
 <?php
-session_start(); // Start session to manage user login state
+session_start();
 include("database.php");
+$error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
-    $password = $_POST["password"]; // Raw password entered by the user
+    $password = $_POST["password"];
 
-    // Query to fetch the user based on the email
     $sql = "SELECT * FROM User WHERE email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $email);
@@ -15,12 +15,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
-
-        // Verify password
         if (password_verify($password, $user['password'])) {
-            // Password is correct; determine the role
-            $_SESSION['user_id'] = $user['id']; // Save user ID in session
-            $_SESSION['role'] = $user['role']; // Save role in session
+            $_SESSION['user_id'] = $user['user_id']; // Correct key
+            $_SESSION['role'] = $user['role'];
 
             switch ($user['role']) {
                 case 'instructor':
@@ -45,6 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 $conn->close();
 ?>
+
 
 
 <!DOCTYPE html">
