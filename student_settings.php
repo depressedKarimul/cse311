@@ -32,8 +32,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
         $newFileName = uniqid('profile_', true) . '.' . $fileExt;
         $uploadDir = 'uploads/profile_pics/';
-        if (move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
-            $profilePic = $uploadDir . $newFileName;
+
+        // Check file size (limit to 2MB)
+        if ($_FILES['profile_pic']['size'] > 2097152) {
+            $error = "File size exceeds the 2MB limit.";
+        } else {
+            // Ensure the directory exists
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true); // Create the directory if it doesn't exist
+            }
+
+            // Move the uploaded file to the target directory
+            if (move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
+                $profilePic = $uploadDir . $newFileName;
+            } else {
+                $error = "Failed to upload the file.";
+            }
         }
     }
 
@@ -126,12 +140,12 @@ $conn->close();
             </div>
 
             <div>
-    <form action="delete_account.php" method="POST">
-        <button type="submit" name="submit" class="w-full px-6 py-3 text-lg font-medium text-[white] bg-[#ff3701] rounded-md hover:bg-[black] hover:text-[red] focus:outline-none focus:ring focus:ring-blue-300 mt-2">
-            <a href="delete_account.php">Permanently Delete Your SkillPro Account</a>
-        </button>
-    </form>
-</div>
+                <form action="delete_account.php" method="POST">
+                    <button type="submit" name="submit" class="w-full px-6 py-3 text-lg font-medium text-[white] bg-[#ff3701] rounded-md hover:bg-[black] hover:text-[red] focus:outline-none focus:ring focus:ring-blue-300 mt-2">
+                        <a href="delete_account.php">Permanently Delete Your SkillPro Account</a>
+                    </button>
+                </form>
+            </div>
 
         </form>
     </div>
