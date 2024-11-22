@@ -5,7 +5,7 @@ $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
-    $password = $_POST["password"];
+    $password = trim($_POST["password"]); // Trim whitespace
 
     $sql = "SELECT * FROM User WHERE email = ?";
     $stmt = $conn->prepare($sql);
@@ -17,10 +17,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = $result->fetch_assoc();
         if (password_verify($password, $user['password'])) {
             // Store user details in session
-            $_SESSION['user_id'] = $user['user_id']; // Correct key
+            $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['role'] = $user['role'];
-            $_SESSION['profile_pic'] = $user['profile_pic']; // Store profile image path
+            $_SESSION['profile_pic'] = $user['profile_pic'] ?: 'default.png'; // Default image
 
+            // Redirect based on role
             switch ($user['role']) {
                 case 'instructor':
                     header("Location: instructor.php");

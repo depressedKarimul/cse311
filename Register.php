@@ -96,6 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="" class="bg-gray-900">Select Role</option>
                     <option value="student" class="bg-gray-900">Student</option>
                     <option value="instructor" class="bg-gray-900">Instructor</option>
+                    <option value="admin" class="bg-gray-900">Admin</option>
                    
                 </select>
             </div>

@@ -247,7 +247,7 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
   >
     <ul class="py-2 text-sm text-gray-100">
       <li>
-        <a href="#" class="block px-4 py-2 hover:bg-[#01797a]">Profile</a>
+        <a href="student_profile.php" class="block px-4 py-2 hover:bg-[#01797a]">Profile</a>
       </li>
       <li>
         <a href="student_settings.php" class="block px-4 py-2 hover:bg-[#01797a]">Settings</a>
