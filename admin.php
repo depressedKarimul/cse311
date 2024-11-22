@@ -10,7 +10,7 @@
    <nav>
    <div class="navbar bg-base-100">
   <div class="navbar-start">
-    <div class="dropdown">
+    <div class="dropdown bg-[#1D232A]">
       <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -52,8 +52,9 @@
           d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
       </svg>
     </button>
-    <button class="btn btn-ghost btn-circle">
+    <a href="approve_request.php"  class="btn btn-ghost btn-circle">
       <div class="indicator">
+        
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-5 w-5"
@@ -68,7 +69,7 @@
         </svg>
         <span class="badge badge-xs badge-primary indicator-item"></span>
       </div>
-    </button>
+    </a>
   </div>
 </div>
    </nav>
@@ -84,14 +85,13 @@
 
 <h2 class="text-center text-4xl text-white bg-[#283747] p-5 font-extrabold" >All Students</h2>
 
-
 <div class="all-student mt-6">
 
 <?php
 include("database.php");
 
 // Fetch all students
-$sql = "SELECT firstName, lastName, profile_pic, bio FROM User WHERE role = 'student'";
+$sql = "SELECT firstName, lastName, email, profile_pic, bio FROM User WHERE role = 'student'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -99,19 +99,20 @@ if ($result->num_rows > 0) {
     $count = 0;
 
     while ($row = $result->fetch_assoc()) {
-        // Start a new row after every 4 cards
+        // Start a new row after every 3 cards
         if ($count % 3 === 0 && $count !== 0) {
             echo '<div class="w-full"></div>';
         }
 
         // Display the student card
-        echo '<div class=" bg-[#283747] p-6 shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] w-full max-w-sm rounded-2xl font-[sans-serif] overflow-hidden">';
+        echo '<div class="bg-[#283747] p-6 shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] w-full max-w-sm rounded-2xl font-[sans-serif] overflow-hidden">';
         echo '<div class="flex flex-col items-center">';
         echo '<div class="min-h-[110px]">';
         echo '<img src="' . htmlspecialchars($row["profile_pic"] ?: "default-profile.png") . '" class="w-28 h-w-28 rounded-full" />';
         echo '</div>';
         echo '<div class="mt-4 text-center">';
         echo '<p class="text-lg text-white font-bold">' . htmlspecialchars($row["firstName"] . " " . $row["lastName"]) . '</p>';
+        echo '<p class="text-sm text-white mt-1">' . htmlspecialchars($row["email"]) . '</p>'; // Add email here
         echo '<p class="text-sm text-white mt-1">' . htmlspecialchars($row["bio"]) . '</p>';
         echo '</div>';
         echo '</div>';
@@ -127,9 +128,61 @@ if ($result->num_rows > 0) {
 
 $conn->close();
 ?>
-
-
 </div>
+
+
+
+<!-- All Instructors -->
+
+
+<h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Instructors</h2>
+
+
+<div class="all-student mt-6">
+
+<?php
+include("database.php");
+
+// Fetch all students
+$sql = "SELECT firstName, lastName, email, profile_pic, bio FROM User WHERE role = 'instructor'";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    echo '<div class="all-student flex flex-wrap justify-center gap-4">';
+    $count = 0;
+
+    while ($row = $result->fetch_assoc()) {
+        // Start a new row after every 3 cards
+        if ($count % 3 === 0 && $count !== 0) {
+            echo '<div class="w-full"></div>';
+        }
+
+        // Display the student card
+        echo '<div class="bg-[#283747] p-6 shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] w-full max-w-sm rounded-2xl font-[sans-serif] overflow-hidden">';
+        echo '<div class="flex flex-col items-center">';
+        echo '<div class="min-h-[110px]">';
+        echo '<img src="' . htmlspecialchars($row["profile_pic"] ?: "default-profile.png") . '" class="w-28 h-w-28 rounded-full" />';
+        echo '</div>';
+        echo '<div class="mt-4 text-center">';
+        echo '<p class="text-lg text-white font-bold">' . htmlspecialchars($row["firstName"] . " " . $row["lastName"]) . '</p>';
+        echo '<p class="text-sm text-white mt-1">' . htmlspecialchars($row["email"]) . '</p>'; // Add email here
+        echo '<p class="text-sm text-white mt-1">' . htmlspecialchars($row["bio"]) . '</p>';
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+
+        $count++;
+    }
+
+    echo '</div>';
+} else {
+    echo '<p class="text-center text-gray-500">No Instructor Found.</p>';
+}
+
+$conn->close();
+?>
+</div>
+
 
 
 
