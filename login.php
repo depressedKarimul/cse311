@@ -7,6 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
     $password = trim($_POST["password"]); // Trim whitespace
 
+    // Fetch user details
     $sql = "SELECT * FROM User WHERE email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $email);
@@ -16,24 +17,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
         if (password_verify($password, $user['password'])) {
-            // Store user details in session
-            $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['role'] = $user['role'];
-            $_SESSION['profile_pic'] = $user['profile_pic'] ?: 'default.png'; // Default image
+            // Check if the instructor is approved
+            if ($user['role'] === 'instructor' && $user['is_approved'] != 1) {
+                $error = "Your account is not yet approved.";
+            } else {
+                // Store user details in session
+                $_SESSION['user_id'] = $user['user_id'];
+                $_SESSION['role'] = $user['role'];
+                $_SESSION['profile_pic'] = $user['profile_pic'] ?: 'default.png'; // Default image
 
-            // Redirect based on role
-            switch ($user['role']) {
-                case 'instructor':
-                    header("Location: instructor.php");
-                    exit();
-                case 'student':
-                    header("Location: student.php");
-                    exit();
-                case 'admin':
-                    header("Location: admin.php");
-                    exit();
-                default:
-                    $error = "Invalid role specified.";
+                // Redirect based on role
+                switch ($user['role']) {
+                    case 'instructor':
+                        header("Location: instructor.php");
+                        exit();
+                    case 'student':
+                        header("Location: student.php");
+                        exit();
+                    case 'admin':
+                        header("Location: admin.php");
+                        exit();
+                    default:
+                        $error = "Invalid role specified.";
+                }
             }
         } else {
             $error = "Incorrect password.";
@@ -45,10 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 $conn->close();
 ?>
-
-
-
-
 <!DOCTYPE html">
 <html lang="en" data-theme="light">
 <head>

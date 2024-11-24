@@ -5,12 +5,12 @@
 
   include('head_content.php')
   
-  ?>
+  ?> 
 </head>
 <body>
 
 <header class="mb-5">
-  <!-- Navigation -->
+  Navigation
    <nav>
    <div class="navbar bg-base-100">
   <div class="navbar-start">

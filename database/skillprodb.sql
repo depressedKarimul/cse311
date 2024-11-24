@@ -141,3 +141,7 @@ CREATE TABLE Forum_Post (
   FOREIGN KEY (course_id) REFERENCES Course(course_id),
   FOREIGN KEY (user_id) REFERENCES User(user_id)
 );
+
+
+
+

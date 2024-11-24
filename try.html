@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="font-sans antialiased text-gray-900 leading-normal tracking-wider bg-gray-100 p-6">
+
+<div class="max-w-6xl mx-auto">
+
+    <!-- User Table Card -->
+    <div class="rounded-lg shadow-lg bg-white p-6 mb-8">
+        <h1 class="text-2xl font-bold mb-4 text-center">User Table</h1>
+        <table class="table-auto w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 px-4 py-2">User ID</th>
+                    <th class="border border-gray-300 px-4 py-2">Name</th>
+                    <th class="border border-gray-300 px-4 py-2">Email</th>
+                    <th class="border border-gray-300 px-4 py-2">Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($user = $userResult->fetch_assoc()) { ?>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2"><?php echo $user['user_id']; ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?php echo $user['firstName'] . ' ' . $user['lastName']; ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?php echo $user['email']; ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?php echo $user['role']; ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Instructor Table Card -->
+    <div class="rounded-lg shadow-lg bg-white p-6">
+        <h1 class="text-2xl font-bold mb-4 text-center">Instructor Table</h1>
+        <table class="table-auto w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 px-4 py-2">Instructor ID</th>
+                    <th class="border border-gray-300 px-4 py-2">Name</th>
+                    <th class="border border-gray-300 px-4 py-2">Expertise</th>
+                    <th class="border border-gray-300 px-4 py-2">Total Courses</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($instructor = $instructorResult->fetch_assoc()) { ?>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2"><?php echo $instructor['instructor_id']; ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?php echo $instructor['firstName'] . ' ' . $instructor['lastName']; ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?php echo $instructor['expertise']; ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?php echo $instructor['total_courses']; ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
