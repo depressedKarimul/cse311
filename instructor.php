@@ -250,6 +250,9 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
         <a href="instructor_profile_edit.php" class="block px-4 py-2 hover:bg-[#01797a]">Profile</a>
       </li>
       <li>
+        <a href="Upload_Course.php" class="block px-4 py-2 hover:bg-[#01797a]">Upload Course</a>
+      </li>
+      <li>
         <a href="student_settings.php" class="block px-4 py-2 hover:bg-[#01797a]">Settings</a>
       </li>
       <li>
