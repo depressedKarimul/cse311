@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include('head_content.php') ?>
+ <?php include('head_content.php') ?>
 </head>
 <body>
+
 <?php
 include('database.php');
 
@@ -80,6 +80,16 @@ while ($course = $result->fetch_assoc()) {
         </div>
       </div>
     </div>
+
+   
+    
+   <!-- Buy Now Button -->
+<div class="absolute bottom-4 right-4 mr-4 mb-4">
+  <a href="buy_course.php?course_id=<?php echo $course['course_id']; ?>" class="bg-blue-500 text-white py-2 px-4 rounded-full shadow-lg hover:bg-blue-600">
+    Buy Now
+  </a>
+</div>
+
   </div> 
 
 <?php
@@ -97,8 +107,6 @@ if ($counter % 3 != 0) {
     echo '</div>'; // Close the remaining flex row div
 }
 ?>
-
-
 
 </body>
 </html>

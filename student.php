@@ -272,12 +272,413 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
 
 
 
+<main>
+<h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Development Courses</h2>
+<?php
+include('database.php');
+
+// Query to get all courses with the forum post date
+$query = "SELECT c.course_id, c.title, c.description, c.category, c.price, 
+                 i.user_id AS instructor_id, u.firstName, u.lastName, u.profile_pic,
+                 fp.post_date
+          FROM Course c
+          JOIN Instructor i ON c.instructor_id = i.instructor_id
+          JOIN User u ON i.user_id = u.user_id
+          LEFT JOIN Forum_Post fp ON c.course_id = fp.course_id
+          WHERE c.status = 'active'"; // Optional: filter by active courses
+$stmt = $conn->prepare($query);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Initialize a counter to track the courses in each row
+$counter = 0;
+
+// Loop through all courses and display them
+while ($course = $result->fetch_assoc()) {
+    // Check if the category is 'Development'
+    if ($course['category'] == 'Development') {
+        // Query to get video content for the course
+        $query_video = "SELECT file_url FROM Course_Content WHERE course_id = ? AND type = 'video'";
+        $stmt_video = $conn->prepare($query_video);
+        $stmt_video->bind_param("i", $course['course_id']);
+        $stmt_video->execute();
+        $result_video = $stmt_video->get_result();
+        $video_content = $result_video->fetch_assoc();
+
+        // Start a new row after every 3 cards
+        if ($counter % 3 == 0) {
+            echo '<div class="flex flex-wrap">';
+        }
+        ?>
+        <!-- Course card HTML -->
+        <div class="relative flex ml-5 flex-col my-6 text-white bg-[#283747] shadow-sm border border-slate-200 rounded-lg w-96">
+          <div class="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
+            <video class="h-full w-full rounded-lg" id="video-<?php echo $course['course_id']; ?>" controls>
+              <!-- Video fetched from Course_Content table -->
+              <source src="<?php echo $video_content['file_url']; ?>" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div id="message-<?php echo $course['course_id']; ?>" class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-60 text-white text-xl font-bold hidden">
+              Please buy the course first to play the video.
+            </div>
+          </div>
+          <div class="p-4">
+            <!-- Title and description fetched from Course table -->
+            <h6 class="mb-2 text-white text-xl font-semibold">
+              <?php echo htmlspecialchars($course['title']); ?>
+            </h6>
+            <p class="text-white leading-normal font-light">
+              <?php echo htmlspecialchars($course['description']); ?>
+            </p>
+            <p class="text-white leading-normal font-light">
+              <h4 class="font-bold">Category: <?php echo htmlspecialchars($course['category']); ?></h4> 
+            </p>
+            <p class="text-white leading-normal font-light">
+              <h4 class="font-bold">Price: $<?php echo number_format($course['price'], 2); ?></h4> 
+            </p>
+          </div>
+          <div class="flex items-center justify-between p-4">
+            <div class="flex items-center">
+              <!-- Instructor profile picture -->
+              <img alt="<?php echo htmlspecialchars($course['firstName'] . ' ' . $course['lastName']); ?>"
+                   src="<?php echo $course['profile_pic']; ?>"
+                   class="relative inline-block h-8 w-8 rounded-full" />
+              <div class="flex flex-col ml-3 text-sm">
+                <span class="text-white font-semibold">
+                  <?php echo htmlspecialchars($course['firstName'] . ' ' . $course['lastName']); ?>
+                </span>
+                <!-- Retrieve post date from Forum_Post table -->
+                <span class="text-white">
+                  <?php echo date('F j, Y', strtotime($course['post_date'])); ?>
+                </span>
+              </div>
+            </div>
+          </div>
+          <!-- Buy Now button positioned at the bottom-right -->
+          <div class="absolute bottom-4 right-4">
+            <a href="buy_course.php?course_id=<?php echo $course['course_id']; ?>" class="bg-blue-600 text-white py-2 px-4 rounded-lg">
+              Buy Now
+            </a>
+          </div>
+        </div>
+        <?php
+        // Close the row after 3 cards
+        $counter++;
+        if ($counter % 3 == 0) {
+            echo '</div>';  // Close the div for the row
+        }
+    }
+} // End of while loop
+
+// If the last row has fewer than 3 cards, close the remaining row div
+if ($counter % 3 != 0) {
+    echo '</div>';
+}
+?>
+
+<script>
+// JavaScript to handle video play, stop it, and show message
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all video elements on the page
+    const videos = document.querySelectorAll('video');
+
+    // Add event listeners to prevent video play, hide controls, and show the message
+    videos.forEach(function(video) {
+        // Disable the controls for the video
+        video.controls = false;
+
+        // Show the message overlay when the user tries to play
+        video.addEventListener('play', function(event) {
+            event.preventDefault(); // Prevent the video from playing
+
+            // Show the message
+            const courseId = video.id.split('-')[1];
+            const messageDiv = document.getElementById('message-' + courseId);
+            messageDiv.classList.remove('hidden');
+
+            // Hide the message after 3 seconds
+            setTimeout(function() {
+                messageDiv.classList.add('hidden');
+            }, 3000);
+        });
+    });
+});
+</script>
+
+<!-- all design -->
+
+
+<h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Design Courses</h2>
+<?php
+include('database.php');
+
+// Query to get all courses with the forum post date
+$query = "SELECT c.course_id, c.title, c.description, c.category, c.price, 
+                 i.user_id AS instructor_id, u.firstName, u.lastName, u.profile_pic,
+                 fp.post_date
+          FROM Course c
+          JOIN Instructor i ON c.instructor_id = i.instructor_id
+          JOIN User u ON i.user_id = u.user_id
+          LEFT JOIN Forum_Post fp ON c.course_id = fp.course_id
+          WHERE c.status = 'active'"; // Optional: filter by active courses
+$stmt = $conn->prepare($query);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Initialize a counter to track the courses in each row
+$counter = 0;
+
+// Loop through all courses and display them
+while ($course = $result->fetch_assoc()) {
+    // Check if the category is 'Design'
+    if ($course['category'] == 'Design') {
+        // Query to get video content for the course
+        $query_video = "SELECT file_url FROM Course_Content WHERE course_id = ? AND type = 'video'";
+        $stmt_video = $conn->prepare($query_video);
+        $stmt_video->bind_param("i", $course['course_id']);
+        $stmt_video->execute();
+        $result_video = $stmt_video->get_result();
+        $video_content = $result_video->fetch_assoc();
+
+        // Start a new row after every 3 cards
+        if ($counter % 3 == 0) {
+            echo '<div class="flex flex-wrap">';
+        }
+        ?>
+        <!-- Course card HTML -->
+        <div class="relative flex ml-5 flex-col my-6 text-white bg-[#283747] shadow-sm border border-slate-200 rounded-lg w-96">
+          <div class="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
+            <video class="h-full w-full rounded-lg" id="video-<?php echo $course['course_id']; ?>" controls>
+              <!-- Video fetched from Course_Content table -->
+              <source src="<?php echo $video_content['file_url']; ?>" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div id="message-<?php echo $course['course_id']; ?>" class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-60 text-white text-xl font-bold hidden">
+              Please buy the course first to play the video.
+            </div>
+          </div>
+          <div class="p-4">
+            <!-- Title and description fetched from Course table -->
+            <h6 class="mb-2 text-white text-xl font-semibold">
+              <?php echo htmlspecialchars($course['title']); ?>
+            </h6>
+            <p class="text-white leading-normal font-light">
+              <?php echo htmlspecialchars($course['description']); ?>
+            </p>
+            <p class="text-white leading-normal font-light">
+              <h4 class="font-bold">Category: <?php echo htmlspecialchars($course['category']); ?></h4> 
+            </p>
+            <p class="text-white leading-normal font-light">
+              <h4 class="font-bold">Price: $<?php echo number_format($course['price'], 2); ?></h4> 
+            </p>
+          </div>
+          <div class="flex items-center justify-between p-4">
+            <div class="flex items-center">
+              <!-- Instructor profile picture -->
+              <img alt="<?php echo htmlspecialchars($course['firstName'] . ' ' . $course['lastName']); ?>"
+                   src="<?php echo $course['profile_pic']; ?>"
+                   class="relative inline-block h-8 w-8 rounded-full" />
+              <div class="flex flex-col ml-3 text-sm">
+                <span class="text-white font-semibold">
+                  <?php echo htmlspecialchars($course['firstName'] . ' ' . $course['lastName']); ?>
+                </span>
+                <!-- Retrieve post date from Forum_Post table -->
+                <span class="text-white">
+                  <?php echo date('F j, Y', strtotime($course['post_date'])); ?>
+                </span>
+              </div>
+            </div>
+          </div>
+          <!-- Buy Now button positioned at the bottom-right -->
+          <div class="absolute bottom-4 right-4">
+            <a href="buy_course.php?course_id=<?php echo $course['course_id']; ?>" class="bg-blue-600 text-white py-2 px-4 rounded-lg">
+              Buy Now
+            </a>
+          </div>
+        </div>
+        <?php
+        // Close the row after 3 cards
+        $counter++;
+        if ($counter % 3 == 0) {
+            echo '</div>';  // Close the div for the row
+        }
+    }
+} // End of while loop
+
+// If the last row has fewer than 3 cards, close the remaining row div
+if ($counter % 3 != 0) {
+    echo '</div>';
+}
+?>
+
+<script>
+// JavaScript to handle video play, stop it, and show message
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all video elements on the page
+    const videos = document.querySelectorAll('video');
+
+    // Add event listeners to prevent video play, hide controls, and show the message
+    videos.forEach(function(video) {
+        // Disable the controls for the video
+        video.controls = false;
+
+        // Show the message overlay when the user tries to play
+        video.addEventListener('play', function(event) {
+            event.preventDefault(); // Prevent the video from playing
+
+            // Show the message
+            const courseId = video.id.split('-')[1];
+            const messageDiv = document.getElementById('message-' + courseId);
+            messageDiv.classList.remove('hidden');
+
+            // Hide the message after 3 seconds
+            setTimeout(function() {
+                messageDiv.classList.add('hidden');
+            }, 3000);
+        });
+    });
+});
+</script>
 
 
 
+<!-- all IT and Software -->
 
 
-    <script src="js/script.js"></script>
-  
+<h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All IT and Software Courses</h2>
+<?php
+include('database.php');
+
+// Query to get all courses with the forum post date
+$query = "SELECT c.course_id, c.title, c.description, c.category, c.price, 
+                 i.user_id AS instructor_id, u.firstName, u.lastName, u.profile_pic,
+                 fp.post_date
+          FROM Course c
+          JOIN Instructor i ON c.instructor_id = i.instructor_id
+          JOIN User u ON i.user_id = u.user_id
+          LEFT JOIN Forum_Post fp ON c.course_id = fp.course_id
+          WHERE c.status = 'active'"; // Optional: filter by active courses
+$stmt = $conn->prepare($query);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Initialize a counter to track the courses in each row
+$counter = 0;
+
+// Loop through all courses and display them
+while ($course = $result->fetch_assoc()) {
+    // Check if the category is 'IT and Software'
+    if ($course['category'] == 'IT and Software') {
+        // Query to get video content for the course
+        $query_video = "SELECT file_url FROM Course_Content WHERE course_id = ? AND type = 'video'";
+        $stmt_video = $conn->prepare($query_video);
+        $stmt_video->bind_param("i", $course['course_id']);
+        $stmt_video->execute();
+        $result_video = $stmt_video->get_result();
+        $video_content = $result_video->fetch_assoc();
+
+        // Start a new row after every 3 cards
+        if ($counter % 3 == 0) {
+            echo '<div class="flex flex-wrap">';
+        }
+        ?>
+        <!-- Course card HTML -->
+        <div class="relative flex ml-5 flex-col my-6 text-white bg-[#283747] shadow-sm border border-slate-200 rounded-lg w-96">
+          <div class="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
+            <video class="h-full w-full rounded-lg" id="video-<?php echo $course['course_id']; ?>" controls>
+              <!-- Video fetched from Course_Content table -->
+              <source src="<?php echo $video_content['file_url']; ?>" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div id="message-<?php echo $course['course_id']; ?>" class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-60 text-white text-xl font-bold hidden">
+              Please buy the course first to play the video.
+            </div>
+          </div>
+          <div class="p-4">
+            <!-- Title and description fetched from Course table -->
+            <h6 class="mb-2 text-white text-xl font-semibold">
+              <?php echo htmlspecialchars($course['title']); ?>
+            </h6>
+            <p class="text-white leading-normal font-light">
+              <?php echo htmlspecialchars($course['description']); ?>
+            </p>
+            <p class="text-white leading-normal font-light">
+              <h4 class="font-bold">Category: <?php echo htmlspecialchars($course['category']); ?></h4> 
+            </p>
+            <p class="text-white leading-normal font-light">
+              <h4 class="font-bold">Price: $<?php echo number_format($course['price'], 2); ?></h4> 
+            </p>
+          </div>
+          <div class="flex items-center justify-between p-4">
+            <div class="flex items-center">
+              <!-- Instructor profile picture -->
+              <img alt="<?php echo htmlspecialchars($course['firstName'] . ' ' . $course['lastName']); ?>"
+                   src="<?php echo $course['profile_pic']; ?>"
+                   class="relative inline-block h-8 w-8 rounded-full" />
+              <div class="flex flex-col ml-3 text-sm">
+                <span class="text-white font-semibold">
+                  <?php echo htmlspecialchars($course['firstName'] . ' ' . $course['lastName']); ?>
+                </span>
+                <!-- Retrieve post date from Forum_Post table -->
+                <span class="text-white">
+                  <?php echo date('F j, Y', strtotime($course['post_date'])); ?>
+                </span>
+              </div>
+            </div>
+          </div>
+          <!-- Buy Now button positioned at the bottom-right -->
+          <div class="absolute bottom-4 right-4">
+            <a href="buy_course.php?course_id=<?php echo $course['course_id']; ?>" class="bg-blue-600 text-white py-2 px-4 rounded-lg">
+              Buy Now
+            </a>
+          </div>
+        </div>
+        <?php
+        // Close the row after 3 cards
+        $counter++;
+        if ($counter % 3 == 0) {
+            echo '</div>';  // Close the div for the row
+        }
+    }
+} // End of while loop
+
+// If the last row has fewer than 3 cards, close the remaining row div
+if ($counter % 3 != 0) {
+    echo '</div>';
+}
+?>
+
+<script>
+// JavaScript to handle video play, stop it, and show message
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all video elements on the page
+    const videos = document.querySelectorAll('video');
+
+    // Add event listeners to prevent video play, hide controls, and show the message
+    videos.forEach(function(video) {
+        // Disable the controls for the video
+        video.controls = false;
+
+        // Show the message overlay when the user tries to play
+        video.addEventListener('play', function(event) {
+            event.preventDefault(); // Prevent the video from playing
+
+            // Show the message
+            const courseId = video.id.split('-')[1];
+            const messageDiv = document.getElementById('message-' + courseId);
+            messageDiv.classList.remove('hidden');
+
+            // Hide the message after 3 seconds
+            setTimeout(function() {
+                messageDiv.classList.add('hidden');
+            }, 3000);
+        });
+    });
+});
+</script>
+</main>
+
+<script src="js/script.js"></script>
+
 </body>
 </html>
