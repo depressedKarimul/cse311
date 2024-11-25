@@ -12,3 +12,11 @@ window.addEventListener("click", (event) => {
     dropdownMenu.classList.add("hidden");
   }
 });
+
+
+function deleteCourse(courseId) {
+  if (confirm("Are you sure you want to delete this course?")) {
+    window.location.href = `delete_course.php?id=${courseId}`;
+  }
+}
+

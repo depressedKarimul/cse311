@@ -29,36 +29,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (mysqli_query($conn, $insert_course_query)) {
         $course_id = mysqli_insert_id($conn);
 
-        // Handle content file upload
-        if (isset($_FILES['content_file'])) {
-            $content_type = $_POST['content_type'];
-            $content_title = $_POST['content_title'];
-            $content_duration = $_POST['content_duration'];
+ // Handle content file upload
+$contentFileUrl = "";
+if (isset($_FILES["content_file"]) && $_FILES["content_file"]["error"] == 0) {
+    $uploadDir = "C:/xampp/htdocs/cse311/Upload Course/"; // Ensure this folder exists
+    $fileName = basename($_FILES["content_file"]["name"]);
+    $targetPath = $uploadDir . $fileName;
 
-            $target_dir = "C:/xampp/htdocs/cse311/Upload Course/";
-            $target_file = $target_dir . basename($_FILES["content_file"]["name"]);
-            $upload_ok = 1;
-            $file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    // Check file type
+    $allowedTypes = ["mp4", "pdf", "docx", "jpg"];
+    $fileType = strtolower(pathinfo($targetPath, PATHINFO_EXTENSION));
 
-            if (!in_array($file_type, ["mp4", "pdf", "docx", "jpg"])) {
-                $message = "Only MP4, PDF, DOCX & JPG files are allowed.";
-                $upload_ok = 0;
-            }
+    if (in_array($fileType, $allowedTypes)) {
+        if (move_uploaded_file($_FILES["content_file"]["tmp_name"], $targetPath)) {
+            $contentFileUrl = "Upload Course/" . $fileName; // Save relative path
 
-            if ($upload_ok && move_uploaded_file($_FILES["content_file"]["tmp_name"], $target_file)) {
-                $insert_content_query = "
-                    INSERT INTO Course_Content (course_id, type, title, file_url, content_duration)
-                    VALUES ('$course_id', '$content_type', '$content_title', '$target_file', '$content_duration')
-                ";
-                if (mysqli_query($conn, $insert_content_query)) {
-                    $message = "Course and content uploaded successfully!";
-                } else {
-                    $message = "Error saving content: " . mysqli_error($conn);
-                }
+            // Insert content data into the database
+            $contentType = $_POST["content_type"];
+            $contentTitle = $_POST["content_title"];
+            $contentDuration = $_POST["content_duration"];
+            $insertContentQuery = "
+                INSERT INTO Course_Content (course_id, type, title, file_url, content_duration)
+                VALUES ('$course_id', '$contentType', '$contentTitle', '$contentFileUrl', '$contentDuration')
+            ";
+
+            if (mysqli_query($conn, $insertContentQuery)) {
+                $message = "Course and content uploaded successfully!";
             } else {
-                $message = "File upload failed.";
+                $errors[] = "Error saving content: " . mysqli_error($conn);
             }
+        } else {
+            $errors[] = "Failed to upload content file.";
         }
+    } else {
+        $errors[] = "Invalid file type. Only MP4, PDF, DOCX, and JPG are allowed.";
+    }
+}
+
 
         $category_query = "SELECT * FROM Category WHERE category_name = '$category'";
         $category_result = mysqli_query($conn, $category_query);

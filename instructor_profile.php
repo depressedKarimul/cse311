@@ -11,6 +11,7 @@ session_start();
 
 // Assuming the user is logged in and the user_id is stored in the session
 $user_id = $_SESSION['user_id'];
+$profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'default_profile.jpg'; // Set a default image if not available
 
 // Query to fetch user and instructor data including instructor_id
 $query = "
@@ -27,7 +28,7 @@ if ($result && mysqli_num_rows($result) > 0) {
     $firstName = $row['firstName'];
     $lastName = $row['lastName'];
     $email = $row['email'];
-    $profile_pic = $row['profile_pic'] ? $row['profile_pic'] : 'https://source.unsplash.com/MP0IUfwrn0A'; // Default pic if no profile pic is found
+    
     $bio = $row['bio'];
     $expertise = $row['expertise'];
     $total_courses = $row['total_courses'];
@@ -90,7 +91,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 
         <!-- Img Col-->
         <div class="w-full lg:w-2/5 h-full">
-            <img src="Upload Photos/zara.jpg" class="rounded-none lg:rounded-lg shadow-2xl hidden lg:block h-full object-cover">
+        <img src="<?php echo htmlspecialchars($profilePic); ?>" alt="Profile" class="w-full h-full object-cover" />
         </div>
 
         

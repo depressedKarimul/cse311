@@ -28,35 +28,36 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
       <!-- Navigation -->
       <nav id="navigation">
         <div class="navbar bg-black">
-          <div class="navbar-start">
-            <!-- Dropdown menu -->
-            <div class="dropdown">
-              <div tabindex="0" role="button" class="hidden btn btn-ghost btn-circle">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 6h16M4 12h16M4 18h7"
-                  />
-                </svg>
-              </div>
-              <ul
-                tabindex="0"
-                class="hidden menu menu-sm dropdown-content bg-black rounded-box z-[1] mt-3 w-52 p-2 shadow"
-              >
-                <li><a>Homepage</a></li>
-                <li><a>Portfolio</a></li>
-                <li><a>About</a></li>
-              </ul>
-            </div>
-          </div>
+        <div class="navbar-start">
+  <!-- Dropdown menu -->
+  <div class="dropdown hidden">
+    <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h7"
+        />
+      </svg>
+    </div>
+    <ul
+  tabindex="0"
+  class="menu menu-sm dropdown-content bg-black rounded-box z-[1] mt-3 w-52 p-2 shadow left-0"
+>
+  <li><a>Homepage</a></li>
+  <li><a>Portfolio</a></li>
+  <li><a>About</a></li>
+</ul>
+  </div>
+</div>
+
 
           <div class="navbar-center">
             <a class="btn btn-ghost text-xl">SkillPro</a>
@@ -272,15 +273,60 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
       </nav>
     </header>
 
+    <h2 class="text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">Your All Courses</h2>
 
+    <?php
+// Database connection
+include('database.php');
 
+// Query to fetch course details and video content
+$sql = "
+    SELECT 
+        Course.title AS course_title, 
+        Course.description, 
+        Course.category, 
+        Course.price, 
+        Course_Content.file_url 
+    FROM 
+        Course 
+    LEFT JOIN 
+        Course_Content ON Course.course_id = Course_Content.course_id 
+    WHERE 
+        Course_Content.type = 'video'
+";
 
+$result = $conn->query($sql);
+?>
 
+<div class="flex flex-wrap justify-center">
+  <?php
+  if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+  ?>
+      <div class="card bg-base-100 w-96 shadow-xl m-4">
+        <video class="h-full w-full rounded-lg" controls>
+          <source src="<?php echo htmlspecialchars($row['file_url']); ?>" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div class="card-body">
+          <h2 class="card-title"><?php echo htmlspecialchars($row['course_title']); ?></h2>
+          <p><?php echo htmlspecialchars($row['description']); ?></p>
+          <p>Category: <?php echo htmlspecialchars($row['category']); ?></p>
+          <p>Price: $<?php echo htmlspecialchars($row['price']); ?></p>
+        </div>
+        
 
+        </div>
+      </div>
+  <?php
+    } // End of while loop
+  } else {
+    echo '<p>No courses available.</p>';
+  } // End of if statement
+  ?>
+</div>
 
-
-
-    <script src="js/script.js"></script>
+<script src="js/script.js"></script>
   
 </body>
 </html>

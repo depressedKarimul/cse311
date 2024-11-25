@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = $result->fetch_assoc();
         if (password_verify($password, $user['password'])) {
             // Check if the instructor is approved
-            if ($user['role'] === 'instructor' && $user['is_approved'] != 1) {
+            if ($user['role'] === 'instructor' && ($user['is_approved'] === NULL || $user['is_approved'] === 0)) {
                 $error = "Your account is not yet approved.";
             } else {
                 // Store user details in session
@@ -51,6 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 $conn->close();
 ?>
+
 <!DOCTYPE html">
 <html lang="en" data-theme="light">
 <head>
