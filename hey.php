@@ -59,6 +59,8 @@ while ($course = $result->fetch_assoc()) {
         <h4 class="font-bold">Category: <?php echo htmlspecialchars($course['category']); ?></h4> 
       </p>
       <p class="text-slate-600 leading-normal font-light">
+
+      <!-- show here course Enrolled date -->
         <h4 class="font-bold">Price: $<?php echo number_format($course['price'], 2); ?></h4> 
       </p>
     </div>
@@ -83,11 +85,8 @@ while ($course = $result->fetch_assoc()) {
 
    
     
-   <!-- Buy Now Button -->
-<div class="absolute bottom-4 right-4 mr-4 mb-4">
-  <a href="buy_course.php?course_id=<?php echo $course['course_id']; ?>" class="bg-blue-500 text-white py-2 px-4 rounded-full shadow-lg hover:bg-blue-600">
-    Buy Now
-  </a>
+  
+
 </div>
 
   </div> 

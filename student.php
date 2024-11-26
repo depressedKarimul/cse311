@@ -768,13 +768,16 @@ while ($course = $result->fetch_assoc()) {
           </div>
           <!-- Buy Now button positioned at the bottom-right -->
           <div class="absolute bottom-4 right-4">
-            <form method="POST" action="">
-              <input type="hidden" name="course_id" value="<?php echo $course['course_id']; ?>" />
-              <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg">
-                Buy Now
-              </button>
-            </form>
-          </div>
+  <form method="POST" action="student_profile.php">
+    <input type="hidden" name="course_id" value="<?php echo $course['course_id']; ?>" />
+    <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>" /> <!-- Send the user_id -->
+    <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg">
+      Buy Now
+    </button>
+  </form>
+</div>
+
+
         </div>
         <?php
         // Close the row after 3 cards
@@ -824,5 +827,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script src="js/script.js"></script>
 
+
+
+<?php include('footer.php') ?>
 </body>
 </html>
