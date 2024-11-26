@@ -268,7 +268,7 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
        <div class="text-gray-900">
        <?php
 include("database.php");
-session_start();
+
 
 // Assuming the user is logged in and the user_id is stored in the session
 $user_id = $_SESSION['user_id'];
@@ -372,14 +372,16 @@ if ($result && mysqli_num_rows($result) > 0) {
        </div>
 
 
-    <!-- My Enrolled Courses -->
-    <h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">My Enrolled Courses</h2>
 
-    <?php
+
+    <!-- My Enrolled Courses -->
+<h2 class="mt-5 justify-center text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">My Enrolled Courses</h2>
+
+<div class="lg:ml-32">
+   <?php
 include('database.php');
 
 // Start the session to retrieve user_id (assuming session_start() is done in your header or elsewhere)
-
 
 // Ensure user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -449,7 +451,7 @@ while ($course = $result->fetch_assoc()) {
   <!-- Course card HTML -->
   <div class="relative flex ml-5 flex-col my-6 text-white bg-[#283747] shadow-sm border border-slate-200 rounded-lg w-96">
     <div class="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
-      <video class="h-full w-full rounded-lg" controls>
+      <video id="video_<?php echo $course['course_id']; ?>" class="h-full w-full rounded-lg" controls>
         <!-- Video fetched from Course_Content table -->
         <source src="<?php echo $video_content['file_url']; ?>" type="video/mp4" />
         Your browser does not support the video tag.
@@ -495,8 +497,14 @@ while ($course = $result->fetch_assoc()) {
         </div>
       </div>
     </div>
-  </div>
 
+    <!-- Buttons hidden initially -->
+    <div class="p-4 hidden" id="buttons_<?php echo $course['course_id']; ?>">
+      <button class="bg-blue-500 text-white px-4 py-2 rounded">Review</button>
+      <button class="bg-green-500 text-white px-4 py-2 rounded">Quiz</button>
+    </div>
+  </div>
+  
 <?php
     // Increment the counter
     $counter++;
@@ -513,6 +521,20 @@ if ($counter % 3 != 0) {
 }
 ?>
 
+<script>
+  // JavaScript to handle the video completion
+  document.querySelectorAll('video').forEach(function(videoElement) {
+    videoElement.addEventListener('ended', function() {
+      // Get the course ID from the video element's ID
+      var courseId = videoElement.id.split('_')[1];
+
+      // Show the "Review" and "Quiz" buttons when the video ends
+      document.getElementById('buttons_' + courseId).classList.remove('hidden');
+    });
+  });
+</script>
+
+
   </main>
     
 
@@ -521,11 +543,15 @@ if ($counter % 3 != 0) {
 
 
 
-    <script src="js/script.js"></script>
+   
 
 
+   </div>
 
     <?php include('footer.php') ?>
+    
+
+    <script src="js/script.js"></script>
   
 </body>
 </html>
