@@ -275,8 +275,48 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
 <main>
 <h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Development Courses</h2>
 <?php
+
 include('database.php');
 
+// Ensure the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Check if the form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get course_id from the form
+    $course_id = $_POST['course_id'];
+    $user_id = $_SESSION['user_id']; // Assuming the user is logged in and their ID is stored in session
+
+    // Query to check if the user is already enrolled in the course
+    $query_check = "SELECT * FROM Enrollment WHERE user_id = ? AND course_id = ?";
+    $stmt_check = $conn->prepare($query_check);
+    $stmt_check->bind_param("ii", $user_id, $course_id);
+    $stmt_check->execute();
+    $result_check = $stmt_check->get_result();
+
+    // If the user is already enrolled in the course, show a message
+    if ($result_check->num_rows > 0) {
+        $message = "You have already enrolled in this course.";
+    } else {
+        // Get current date for enrollment
+        $enrollment_date = date('Y-m-d');
+
+        // Insert the enrollment information into the database
+        $query = "INSERT INTO Enrollment (user_id, course_id, enrollment_date) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("iis", $user_id, $course_id, $enrollment_date);
+        $stmt->execute();
+
+        // Show a success message
+        $message = "Enrollment successful!";
+    }
+}
+?>
+
+<?php
 // Query to get all courses with the forum post date
 $query = "SELECT c.course_id, c.title, c.description, c.category, c.price, 
                  i.user_id AS instructor_id, u.firstName, u.lastName, u.profile_pic,
@@ -336,6 +376,10 @@ while ($course = $result->fetch_assoc()) {
             <p class="text-white leading-normal font-light">
               <h4 class="font-bold">Price: $<?php echo number_format($course['price'], 2); ?></h4> 
             </p>
+            <!-- Display message if user is already enrolled -->
+            <?php if (isset($message)) { ?>
+                <div class="text-red-500 font-bold mt-2"><?php echo $message; ?></div>
+            <?php } ?>
           </div>
           <div class="flex items-center justify-between p-4">
             <div class="flex items-center">
@@ -356,9 +400,12 @@ while ($course = $result->fetch_assoc()) {
           </div>
           <!-- Buy Now button positioned at the bottom-right -->
           <div class="absolute bottom-4 right-4">
-            <a href="buy_course.php?course_id=<?php echo $course['course_id']; ?>" class="bg-blue-600 text-white py-2 px-4 rounded-lg">
-              Buy Now
-            </a>
+            <form method="POST" action="">
+              <input type="hidden" name="course_id" value="<?php echo $course['course_id']; ?>" />
+              <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg">
+                Buy Now
+              </button>
+            </form>
           </div>
         </div>
         <?php
@@ -375,6 +422,7 @@ if ($counter % 3 != 0) {
     echo '</div>';
 }
 ?>
+
 
 <script>
 // JavaScript to handle video play, stop it, and show message
@@ -410,8 +458,48 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Design Courses</h2>
 <?php
+
 include('database.php');
 
+// Ensure the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Check if the form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get course_id from the form
+    $course_id = $_POST['course_id'];
+    $user_id = $_SESSION['user_id']; // Assuming the user is logged in and their ID is stored in session
+
+    // Query to check if the user is already enrolled in the course
+    $query_check = "SELECT * FROM Enrollment WHERE user_id = ? AND course_id = ?";
+    $stmt_check = $conn->prepare($query_check);
+    $stmt_check->bind_param("ii", $user_id, $course_id);
+    $stmt_check->execute();
+    $result_check = $stmt_check->get_result();
+
+    // If the user is already enrolled in the course, show a message
+    if ($result_check->num_rows > 0) {
+        $message = "You have already enrolled in this course.";
+    } else {
+        // Get current date for enrollment
+        $enrollment_date = date('Y-m-d');
+
+        // Insert the enrollment information into the database
+        $query = "INSERT INTO Enrollment (user_id, course_id, enrollment_date) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("iis", $user_id, $course_id, $enrollment_date);
+        $stmt->execute();
+
+        // Show a success message
+        $message = "Enrollment successful!";
+    }
+}
+?>
+
+<?php
 // Query to get all courses with the forum post date
 $query = "SELECT c.course_id, c.title, c.description, c.category, c.price, 
                  i.user_id AS instructor_id, u.firstName, u.lastName, u.profile_pic,
@@ -471,6 +559,10 @@ while ($course = $result->fetch_assoc()) {
             <p class="text-white leading-normal font-light">
               <h4 class="font-bold">Price: $<?php echo number_format($course['price'], 2); ?></h4> 
             </p>
+            <!-- Display message if user is already enrolled -->
+            <?php if (isset($message)) { ?>
+                <div class="text-red-500 font-bold mt-2"><?php echo $message; ?></div>
+            <?php } ?>
           </div>
           <div class="flex items-center justify-between p-4">
             <div class="flex items-center">
@@ -491,9 +583,12 @@ while ($course = $result->fetch_assoc()) {
           </div>
           <!-- Buy Now button positioned at the bottom-right -->
           <div class="absolute bottom-4 right-4">
-            <a href="buy_course.php?course_id=<?php echo $course['course_id']; ?>" class="bg-blue-600 text-white py-2 px-4 rounded-lg">
-              Buy Now
-            </a>
+            <form method="POST" action="">
+              <input type="hidden" name="course_id" value="<?php echo $course['course_id']; ?>" />
+              <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg">
+                Buy Now
+              </button>
+            </form>
           </div>
         </div>
         <?php
@@ -510,6 +605,7 @@ if ($counter % 3 != 0) {
     echo '</div>';
 }
 ?>
+
 
 <script>
 // JavaScript to handle video play, stop it, and show message
@@ -547,8 +643,48 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All IT and Software Courses</h2>
 <?php
+
 include('database.php');
 
+// Ensure the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Check if the form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get course_id from the form
+    $course_id = $_POST['course_id'];
+    $user_id = $_SESSION['user_id']; // Assuming the user is logged in and their ID is stored in session
+
+    // Query to check if the user is already enrolled in the course
+    $query_check = "SELECT * FROM Enrollment WHERE user_id = ? AND course_id = ?";
+    $stmt_check = $conn->prepare($query_check);
+    $stmt_check->bind_param("ii", $user_id, $course_id);
+    $stmt_check->execute();
+    $result_check = $stmt_check->get_result();
+
+    // If the user is already enrolled in the course, show a message
+    if ($result_check->num_rows > 0) {
+        $message = "You have already enrolled in this course.";
+    } else {
+        // Get current date for enrollment
+        $enrollment_date = date('Y-m-d');
+
+        // Insert the enrollment information into the database
+        $query = "INSERT INTO Enrollment (user_id, course_id, enrollment_date) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("iis", $user_id, $course_id, $enrollment_date);
+        $stmt->execute();
+
+        // Show a success message
+        $message = "Enrollment successful!";
+    }
+}
+?>
+
+<?php
 // Query to get all courses with the forum post date
 $query = "SELECT c.course_id, c.title, c.description, c.category, c.price, 
                  i.user_id AS instructor_id, u.firstName, u.lastName, u.profile_pic,
@@ -567,7 +703,7 @@ $counter = 0;
 
 // Loop through all courses and display them
 while ($course = $result->fetch_assoc()) {
-    // Check if the category is 'IT and Software'
+    // Check if the category is 'IT and Softwaret'
     if ($course['category'] == 'IT and Software') {
         // Query to get video content for the course
         $query_video = "SELECT file_url FROM Course_Content WHERE course_id = ? AND type = 'video'";
@@ -608,6 +744,10 @@ while ($course = $result->fetch_assoc()) {
             <p class="text-white leading-normal font-light">
               <h4 class="font-bold">Price: $<?php echo number_format($course['price'], 2); ?></h4> 
             </p>
+            <!-- Display message if user is already enrolled -->
+            <?php if (isset($message)) { ?>
+                <div class="text-red-500 font-bold mt-2"><?php echo $message; ?></div>
+            <?php } ?>
           </div>
           <div class="flex items-center justify-between p-4">
             <div class="flex items-center">
@@ -628,9 +768,12 @@ while ($course = $result->fetch_assoc()) {
           </div>
           <!-- Buy Now button positioned at the bottom-right -->
           <div class="absolute bottom-4 right-4">
-            <a href="buy_course.php?course_id=<?php echo $course['course_id']; ?>" class="bg-blue-600 text-white py-2 px-4 rounded-lg">
-              Buy Now
-            </a>
+            <form method="POST" action="">
+              <input type="hidden" name="course_id" value="<?php echo $course['course_id']; ?>" />
+              <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg">
+                Buy Now
+              </button>
+            </form>
           </div>
         </div>
         <?php
@@ -647,6 +790,7 @@ if ($counter % 3 != 0) {
     echo '</div>';
 }
 ?>
+
 
 <script>
 // JavaScript to handle video play, stop it, and show message
