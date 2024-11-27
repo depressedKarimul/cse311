@@ -101,17 +101,18 @@ CREATE TABLE Enrollment (
 );
 
 
--- Payment Table
+--  Payment Table
 CREATE TABLE Payment (
   payment_id INT AUTO_INCREMENT PRIMARY KEY,
-  student_id INT,
+  user_id INT,
   course_id INT,
   amount DECIMAL(10, 2),
   payment_date DATE,
   transaction_id VARCHAR(255),
-  FOREIGN KEY (student_id) REFERENCES Student(student_id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE,
   FOREIGN KEY (course_id) REFERENCES Course(course_id) ON DELETE CASCADE
 );
+
 
 -- Review Table
 CREATE TABLE course_reviews (

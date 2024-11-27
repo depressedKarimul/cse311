@@ -275,7 +275,6 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
 <main>
 <h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Development Courses</h2>
 <?php
-
 include('database.php');
 
 // Ensure the user is logged in
@@ -305,18 +304,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $enrollment_date = date('Y-m-d');
 
         // Insert the enrollment information into the database
-        $query = "INSERT INTO Enrollment (user_id, course_id, enrollment_date) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("iis", $user_id, $course_id, $enrollment_date);
-        $stmt->execute();
+        $query_enroll = "INSERT INTO Enrollment (user_id, course_id, enrollment_date) VALUES (?, ?, ?)";
+        $stmt_enroll = $conn->prepare($query_enroll);
+        $stmt_enroll->bind_param("iis", $user_id, $course_id, $enrollment_date);
+        $stmt_enroll->execute();
 
-        // Show a success message
-        $message = "Enrollment successful!";
+        // Get the course price from the Course table
+        $query_course = "SELECT price FROM Course WHERE course_id = ?";
+        $stmt_course = $conn->prepare($query_course);
+        $stmt_course->bind_param("i", $course_id);
+        $stmt_course->execute();
+        $result_course = $stmt_course->get_result();
+        $course = $result_course->fetch_assoc();
+
+        // Insert payment information
+        $amount = $course['price'];  // Get the price from the Course table
+        $transaction_id = uniqid('txn_');  // Generate a unique transaction ID
+        $payment_date = date('Y-m-d'); // Set today's date for the payment date
+
+        // Insert the payment record
+        $query_payment = "INSERT INTO Payment (user_id, course_id, amount, payment_date, transaction_id) VALUES (?, ?, ?, ?, ?)";
+        $stmt_payment = $conn->prepare($query_payment);
+        $stmt_payment->bind_param("iisds", $user_id, $course_id, $amount, $payment_date, $transaction_id);
+        $stmt_payment->execute();
+
+        // Show a success message and redirect to the profile page
+        // $message = "Enrollment and payment successful!";
+        // header("Location: student_profile.php");  // Redirect after success
+        // exit();
     }
 }
-?>
 
-<?php
 // Query to get all courses with the forum post date
 $query = "SELECT c.course_id, c.title, c.description, c.category, c.price, 
                  i.user_id AS instructor_id, u.firstName, u.lastName, u.profile_pic,
@@ -377,9 +395,7 @@ while ($course = $result->fetch_assoc()) {
               <h4 class="font-bold">Price: $<?php echo number_format($course['price'], 2); ?></h4> 
             </p>
             <!-- Display message if user is already enrolled -->
-            <?php if (isset($message)) { ?>
-                <div class="text-red-500 font-bold mt-2"><?php echo $message; ?></div>
-            <?php } ?>
+           
           </div>
           <div class="flex items-center justify-between p-4">
             <div class="flex items-center">
@@ -419,10 +435,9 @@ while ($course = $result->fetch_assoc()) {
 
 // If the last row has fewer than 3 cards, close the remaining row div
 if ($counter % 3 != 0) {
-    echo '</div>';
+    echo '</div>';  // Close the div for the last row
 }
 ?>
-
 
 <script>
 // JavaScript to handle video play, stop it, and show message
@@ -458,7 +473,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Design Courses</h2>
 <?php
-
 include('database.php');
 
 // Ensure the user is logged in
@@ -488,18 +502,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $enrollment_date = date('Y-m-d');
 
         // Insert the enrollment information into the database
-        $query = "INSERT INTO Enrollment (user_id, course_id, enrollment_date) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("iis", $user_id, $course_id, $enrollment_date);
-        $stmt->execute();
+        $query_enroll = "INSERT INTO Enrollment (user_id, course_id, enrollment_date) VALUES (?, ?, ?)";
+        $stmt_enroll = $conn->prepare($query_enroll);
+        $stmt_enroll->bind_param("iis", $user_id, $course_id, $enrollment_date);
+        $stmt_enroll->execute();
 
-        // Show a success message
-        $message = "Enrollment successful!";
+        // Get the course price from the Course table
+        $query_course = "SELECT price FROM Course WHERE course_id = ?";
+        $stmt_course = $conn->prepare($query_course);
+        $stmt_course->bind_param("i", $course_id);
+        $stmt_course->execute();
+        $result_course = $stmt_course->get_result();
+        $course = $result_course->fetch_assoc();
+
+        // Insert payment information
+        $amount = $course['price'];  // Get the price from the Course table
+        $transaction_id = uniqid('txn_');  // Generate a unique transaction ID
+        $payment_date = date('Y-m-d'); // Set today's date for the payment date
+
+        // Insert the payment record
+        $query_payment = "INSERT INTO Payment (user_id, course_id, amount, payment_date, transaction_id) VALUES (?, ?, ?, ?, ?)";
+        $stmt_payment = $conn->prepare($query_payment);
+        $stmt_payment->bind_param("iisds", $user_id, $course_id, $amount, $payment_date, $transaction_id);
+        $stmt_payment->execute();
+
+        // Show a success message and redirect to the profile page
+        // $message = "Enrollment and payment successful!";
+        // header("Location: student_profile.php");  // Redirect after success
+        // exit();
     }
 }
-?>
 
-<?php
 // Query to get all courses with the forum post date
 $query = "SELECT c.course_id, c.title, c.description, c.category, c.price, 
                  i.user_id AS instructor_id, u.firstName, u.lastName, u.profile_pic,
@@ -518,7 +551,7 @@ $counter = 0;
 
 // Loop through all courses and display them
 while ($course = $result->fetch_assoc()) {
-    // Check if the category is 'Design'
+    // Check if the category is 'IT and Software'
     if ($course['category'] == 'Design') {
         // Query to get video content for the course
         $query_video = "SELECT file_url FROM Course_Content WHERE course_id = ? AND type = 'video'";
@@ -560,9 +593,7 @@ while ($course = $result->fetch_assoc()) {
               <h4 class="font-bold">Price: $<?php echo number_format($course['price'], 2); ?></h4> 
             </p>
             <!-- Display message if user is already enrolled -->
-            <?php if (isset($message)) { ?>
-                <div class="text-red-500 font-bold mt-2"><?php echo $message; ?></div>
-            <?php } ?>
+          
           </div>
           <div class="flex items-center justify-between p-4">
             <div class="flex items-center">
@@ -602,10 +633,9 @@ while ($course = $result->fetch_assoc()) {
 
 // If the last row has fewer than 3 cards, close the remaining row div
 if ($counter % 3 != 0) {
-    echo '</div>';
+    echo '</div>';  // Close the div for the last row
 }
 ?>
-
 
 <script>
 // JavaScript to handle video play, stop it, and show message
@@ -636,14 +666,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-
-
 <!-- all IT and Software -->
 
 
 <h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All IT and Software Courses</h2>
 <?php
-
 include('database.php');
 
 // Ensure the user is logged in
@@ -673,18 +700,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $enrollment_date = date('Y-m-d');
 
         // Insert the enrollment information into the database
-        $query = "INSERT INTO Enrollment (user_id, course_id, enrollment_date) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("iis", $user_id, $course_id, $enrollment_date);
-        $stmt->execute();
+        $query_enroll = "INSERT INTO Enrollment (user_id, course_id, enrollment_date) VALUES (?, ?, ?)";
+        $stmt_enroll = $conn->prepare($query_enroll);
+        $stmt_enroll->bind_param("iis", $user_id, $course_id, $enrollment_date);
+        $stmt_enroll->execute();
 
-        // Show a success message
-        $message = "Enrollment successful!";
+        // Get the course price from the Course table
+        $query_course = "SELECT price FROM Course WHERE course_id = ?";
+        $stmt_course = $conn->prepare($query_course);
+        $stmt_course->bind_param("i", $course_id);
+        $stmt_course->execute();
+        $result_course = $stmt_course->get_result();
+        $course = $result_course->fetch_assoc();
+
+        // Insert payment information
+        $amount = $course['price'];  // Get the price from the Course table
+        $transaction_id = uniqid('txn_');  // Generate a unique transaction ID
+        $payment_date = date('Y-m-d'); // Set today's date for the payment date
+
+        // Insert the payment record
+        $query_payment = "INSERT INTO Payment (user_id, course_id, amount, payment_date, transaction_id) VALUES (?, ?, ?, ?, ?)";
+        $stmt_payment = $conn->prepare($query_payment);
+        $stmt_payment->bind_param("iisds", $user_id, $course_id, $amount, $payment_date, $transaction_id);
+        $stmt_payment->execute();
+
+        // Show a success message and redirect to the profile page
+        // $message = "Enrollment and payment successful!";
+        // header("Location: student_profile.php");  // Redirect after success
+        // exit();
     }
 }
-?>
 
-<?php
 // Query to get all courses with the forum post date
 $query = "SELECT c.course_id, c.title, c.description, c.category, c.price, 
                  i.user_id AS instructor_id, u.firstName, u.lastName, u.profile_pic,
@@ -703,7 +749,7 @@ $counter = 0;
 
 // Loop through all courses and display them
 while ($course = $result->fetch_assoc()) {
-    // Check if the category is 'IT and Softwaret'
+    // Check if the category is 'IT and Software'
     if ($course['category'] == 'IT and Software') {
         // Query to get video content for the course
         $query_video = "SELECT file_url FROM Course_Content WHERE course_id = ? AND type = 'video'";
@@ -745,9 +791,7 @@ while ($course = $result->fetch_assoc()) {
               <h4 class="font-bold">Price: $<?php echo number_format($course['price'], 2); ?></h4> 
             </p>
             <!-- Display message if user is already enrolled -->
-            <?php if (isset($message)) { ?>
-                <div class="text-red-500 font-bold mt-2"><?php echo $message; ?></div>
-            <?php } ?>
+           
           </div>
           <div class="flex items-center justify-between p-4">
             <div class="flex items-center">
@@ -768,16 +812,13 @@ while ($course = $result->fetch_assoc()) {
           </div>
           <!-- Buy Now button positioned at the bottom-right -->
           <div class="absolute bottom-4 right-4">
-  <form method="POST" action="student_profile.php">
-    <input type="hidden" name="course_id" value="<?php echo $course['course_id']; ?>" />
-    <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>" /> <!-- Send the user_id -->
-    <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg">
-      Buy Now
-    </button>
-  </form>
-</div>
-
-
+            <form method="POST" action="">
+              <input type="hidden" name="course_id" value="<?php echo $course['course_id']; ?>" />
+              <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg">
+                Buy Now
+              </button>
+            </form>
+          </div>
         </div>
         <?php
         // Close the row after 3 cards
@@ -790,10 +831,9 @@ while ($course = $result->fetch_assoc()) {
 
 // If the last row has fewer than 3 cards, close the remaining row div
 if ($counter % 3 != 0) {
-    echo '</div>';
+    echo '</div>';  // Close the div for the last row
 }
 ?>
-
 
 <script>
 // JavaScript to handle video play, stop it, and show message
