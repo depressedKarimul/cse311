@@ -57,19 +57,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 VALUES ('$firstName','$lastName','$email','$hashedPassword', '$role', '$profilePic', '$bio')";
 
         try {
-            mysqli_query($conn, $sql);
-            $successMessage = "You are now registered!";
-            header("Location: login.php");
-            exit();
-        } catch (mysqli_sql_exception $e) {
-            $errors[] = "Error: Could not register user. Please try again.";
+            // Begin transaction
+            mysqli_begin_transaction($conn);
+
+            // Execute user insertion
+            if (mysqli_query($conn, $sql)) {
+                // Get the inserted user's ID
+                $user_id = mysqli_insert_id($conn);
+
+                // If the role is student, insert into the Student table
+                if ($role === 'student') {
+                    $student_sql = "INSERT INTO Student (user_id) VALUES ($user_id)";
+                    if (!mysqli_query($conn, $student_sql)) {
+                        throw new Exception("Error inserting student record.");
+                    }
+                }
+
+                // Commit transaction
+                mysqli_commit($conn);
+
+                $successMessage = "You are now registered!";
+                header("Location: login.php");
+                exit();
+            } else {
+                throw new Exception("Error inserting user record.");
+            }
+        } catch (Exception $e) {
+            // Rollback transaction on error
+            mysqli_rollback($conn);
+            $errors[] = "Error: " . $e->getMessage();
         }
     }
 
     mysqli_close($conn);
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -120,7 +142,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="student" class="bg-gray-900">Student</option>
                     <option value="instructor" class="bg-gray-900">Instructor</option>
                     <option value="admin" class="bg-gray-900">Admin</option>
-                   
                 </select>
             </div>
             <div>
@@ -141,14 +162,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <!-- Success Messages -->
-
-            
-
             <?php if (!empty($successMessage)): ?>
-    <div class="mt-4 text-green-500">
-        <p><?= $successMessage ?></p>
-    </div>
-<?php endif; ?>
+                <div class="mt-4 text-green-500">
+                    <p><?= $successMessage ?></p>
+                </div>
+            <?php endif; ?>
 
             <!-- Error Messages -->
             <?php if (!empty($errors)): ?>

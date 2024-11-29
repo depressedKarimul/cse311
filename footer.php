@@ -1,4 +1,4 @@
-<footer class="mt-11 grid lg:grid-cols-4 bg-black text-white text-base-content p-16">
+<footer class="mt-11 grid lg:grid-cols-4 bg-black text-white text-base-content lg:p-16 p-5">
 
 <nav>
  <img class="w-1/4" src="Images/logo/skillPro logo.jpg" alt="">
