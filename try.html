@@ -7,72 +7,32 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
- 
-  <div>
-    <a href="javascript:void(0)">
-      <div class="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96">
-        <div class="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
-          <video class="h-full w-full rounded-lg" controls>
+  <div class="m-10 max-w-sm">
 
-            <!-- Video will fetch from Course_Content table's file_url -->
-            <source
-              src="https://docs.material-tailwind.com/demo.mp4"
-              type="video/mp4"
-            />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <div class="p-4">
-          <!-- fetch from course table -->
-          <h6 class="mb-2 text-slate-800 text-xl font-semibold">
-            <!-- title VARCHAR(255), -->
-            Website Review Check
-          </h6>
-
-          <!-- description TEXT, -->
-          <p class="text-slate-600 leading-normal font-light">
-            The place is close to Barceloneta Beach and bus stop just 2 min by walk
-            and near to &quot;Naviglio&quot; where you can enjoy the main night life in
-            Barcelona.
-          </p>
-
-          <p class="text-slate-600 leading-normal font-light">
-            <!-- From course table -->
-            <h4 class="font-bold">Category :</h4> 
-          </p>
-
-          <p class="text-slate-600 leading-normal font-light">
-            <!-- From course table -->
-            <h4 class="font-bold">Price :</h4> 
-          </p>
-        </div>
-     
-        <div class="flex items-center justify-between p-4">
-          <div class="flex items-center">
-            <!-- Instructor image from user table -->
-            <img
-              alt="Tania Andrew"
-
-              
-              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1480&amp;q=80"
-              class="relative inline-block h-8 w-8 rounded-full"
-            />
-            <div class="flex flex-col ml-3 text-sm">
-              <span class="text-slate-800 font-semibold">Lewis Daniel</span>
-              <span class="text-slate-600">
-                January 10, 2024
-              </span>
-            </div>
-          </div>
-        </div>
-      </div> 
-    </a>
+    <!-- put here Student image from database -->
+    <div class="rounded-lg border bg-white px-4 pt-8 pb-10 shadow-lg">
+      <div class="relative mx-auto w-36 rounded-full">
+        <span class="absolute right-0 m-3 h-3 w-3 rounded-full bg-green-500 ring-2 ring-green-300 ring-offset-2"></span>
+        <img class="mx-auto h-auto w-full rounded-full" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80" alt="" />
+      </div>
+      <!--put here student name from database -->
+      <h1 class="my-1 text-center text-xl font-bold leading-8 text-gray-900">Michael Simbal</h1>
+      <!-- student bio  from database-->
+      <h3 class="font-lg text-semibold text-center leading-6 text-gray-600">Marketing Exec. at Denva Corp</h3>
+      <p class="text-center text-sm leading-6 text-gray-500 hover:text-gray-600">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Architecto, placeat!</p>
+      <ul class="mt-3 divide-y rounded bg-gray-100 py-2 px-3 text-gray-600 shadow-sm hover:text-gray-700 hover:shadow">
+        <li class="flex items-center py-3 text-sm">
+          <span>Status</span>
+          <span class="ml-auto"><span class="rounded-full bg-green-200 py-1 px-2 text-xs font-medium text-green-700">Open for side gigs</span></span>
+        </li>
+        <li class="flex items-center py-3 text-sm">
+          <span>Joined On</span>
+          <span class="ml-auto">Apr 08, 2022</span>
+        </li>
+      </ul>
+    </div>
   </div>
-
-  <img src="database/skillprodb.sql" alt="">
-
-
-<h1 class="ml-28"></h1>
+  
   
 </body>
 </html>

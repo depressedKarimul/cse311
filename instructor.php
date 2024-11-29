@@ -276,10 +276,36 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
     <h2 class="text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">Your All Courses</h2>
 
     <?php
+
+
+// Ensure the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Fetch the logged-in user ID
+$user_id = $_SESSION['user_id']; // User's ID from the session
+
 // Database connection
 include('database.php');
 
-// Query to fetch course details and video content
+// Get the instructor ID of the logged-in user
+$query_instructor = "SELECT instructor_id FROM Instructor WHERE user_id = ?";
+$stmt_instructor = $conn->prepare($query_instructor);
+$stmt_instructor->bind_param("i", $user_id);
+$stmt_instructor->execute();
+$result_instructor = $stmt_instructor->get_result();
+$instructor = $result_instructor->fetch_assoc();
+
+if (!$instructor) {
+    echo "No instructor profile found.";
+    exit();
+}
+
+$instructor_id = $instructor['instructor_id'];
+
+// Query to fetch only the logged-in instructor's courses and video content
 $sql = "
     SELECT 
         Course.title AS course_title, 
@@ -292,10 +318,13 @@ $sql = "
     LEFT JOIN 
         Course_Content ON Course.course_id = Course_Content.course_id 
     WHERE 
-        Course_Content.type = 'video'
-";
+        Course_Content.type = 'video' 
+        AND Course.instructor_id = ?"; // Filter by logged-in instructor
 
-$result = $conn->query($sql);
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $instructor_id);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <div class="flex flex-wrap justify-center">
@@ -314,17 +343,107 @@ $result = $conn->query($sql);
           <p>Category: <?php echo htmlspecialchars($row['category']); ?></p>
           <p>Price: $<?php echo htmlspecialchars($row['price']); ?></p>
         </div>
-        
-
-        </div>
       </div>
   <?php
-    } // End of while loop
+    }
   } else {
     echo '<p>No courses available.</p>';
-  } // End of if statement
+  }
   ?>
 </div>
+
+</div>
+
+
+<h2 class="text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">Students who have purchased courses</h2>
+<?php
+
+
+
+// Ensure the user is logged in
+if (!isset($_SESSION['user_id'])) {
+  header("Location: login.php");
+  exit();
+}
+
+// Fetch the logged-in user ID
+$user_id = $_SESSION['user_id'];
+
+// Database connection
+include('database.php');
+
+// Query
+$sql = "
+  SELECT 
+      User.firstName, 
+      User.lastName, 
+      User.email, 
+      User.profile_pic, 
+      User.bio, 
+      Enrollment.enrollment_date,
+      Course.title
+  FROM 
+      Enrollment 
+  JOIN 
+      Course ON Enrollment.course_id = Course.course_id 
+  JOIN 
+      Instructor ON Course.instructor_id = Instructor.instructor_id 
+  JOIN 
+      User ON Enrollment.user_id = User.user_id 
+  WHERE 
+      Instructor.user_id = ?
+";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+?>
+<div class="flex flex-wrap justify-center">
+  <?php
+  $col_count = 0;
+
+  if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+      $profile_pic = !empty($row['profile_pic']) ? htmlspecialchars($row['profile_pic']) : 'default_profile.jpg';
+      $full_name = htmlspecialchars($row['firstName']) . ' ' . htmlspecialchars($row['lastName']);
+      $bio = htmlspecialchars($row['bio']);
+      $enrollment_date = htmlspecialchars($row['enrollment_date']);
+      $course_title = htmlspecialchars($row['title']); // Fetch course title directly
+
+      // Start a new row after every 3 cards
+      if ($col_count % 3 === 0 && $col_count !== 0) {
+        echo '</div><div class="flex flex-wrap justify-center">';
+      }
+  ?>
+      <div class="rounded-lg border bg-[#283747] px-4 pt-8 pb-10 shadow-lg m-4 w-96">
+        <div class="relative mx-auto w-36 rounded-full">
+          <img class="mx-auto h-auto w-full rounded-full" src="<?php echo $profile_pic; ?>" alt="<?php echo $full_name; ?>" />
+        </div>
+        <h1 class="my-1 text-center text-xl font-bold leading-8 text-white"><?php echo $full_name; ?></h1>
+        <h3 class="font-lg text-semibold text-center leading-6 text-white"><?php echo $bio ?: 'No bio available'; ?></h3>
+        <p class="text-center text-sm leading-6 text-white hover:text-white">Course: <?php echo $course_title ?: 'None'; ?></p>
+        <ul class="mt-3 divide-y rounded bg-[#1D232A] py-2 px-3 text-white shadow-sm hover:text-white hover:shadow">
+          <li class="flex items-center py-3 text-sm">
+            <span>Email</span>
+            <span class="ml-auto"><?php echo htmlspecialchars($row['email']); ?></span>
+          </li>
+          <li class="flex items-center py-3 text-sm">
+            <span>Joined On</span>
+            <span class="ml-auto"><?php echo date("M d, Y", strtotime($enrollment_date)); ?></span>
+          </li>
+        </ul>
+      </div>
+  <?php
+      $col_count++;
+    }
+  } else {
+    echo '<p>No students have purchased your courses yet.</p>';
+  }
+  ?>
+</div>
+
 
 <script src="js/script.js"></script>
   
