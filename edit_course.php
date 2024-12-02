@@ -1,116 +1,113 @@
 <?php
-// Include database configuration
-include('database.php');
 session_start();
 
-$message = ""; // For success/error messages
-
-// Assuming the user is logged in, and the user_id is stored in the session
-$user_id = $_SESSION['user_id'];
-
-$query = "SELECT instructor_id FROM Instructor WHERE user_id = $user_id";
-$result = mysqli_query($conn, $query);
-$row = mysqli_fetch_assoc($result);
-$instructor_id = $row['instructor_id'];
-
-// Retrieve course details for editing
-$course_id = $_GET['course_id']; // Course ID should be passed as a query parameter
-$course_query = "SELECT * FROM Course WHERE course_id = '$course_id' AND instructor_id = '$instructor_id'";
-$course_result = mysqli_query($conn, $course_query);
-$course_data = mysqli_fetch_assoc($course_result);
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $course_title = $_POST['course_title'];
-    $course_description = $_POST['course_description'];
-    $category = $_POST['category'];
-    $difficulty = $_POST['difficulty'];
-    $price = $_POST['price'];
-    $status = $_POST['status'];
-
-    // Update course information
-    $update_course_query = "
-        UPDATE Course
-        SET 
-            title = '$course_title',
-            description = '$course_description',
-            category = '$category',
-            difficulty = '$difficulty',
-            price = '$price',
-            status = '$status'
-        WHERE course_id = '$course_id' AND instructor_id = '$instructor_id'
-    ";
-    
-    if (mysqli_query($conn, $update_course_query)) {
-        $message = "Course updated successfully!";
-    } else {
-        $message = "Error updating course: " . mysqli_error($conn);
-    }
+// Ensure the user is logged in
+if (!isset($_SESSION['user_id'])) {
+  header("Location: login.php");
+  exit();
 }
+
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <?php include('head_content.php') ?>
+   <?php include('head_content.php'); ?>
 </head>
-<body class="p-6">
-    <div class="max-w-4xl mx-auto bg-[#283747] p-8 rounded-lg shadow-lg">
-        <h1 class="text-3xl text-center bg-[#1D232A] p-5 font-semibold text-white mb-6">Upload Course Content</h1>
+<body>
 
-        <form action="" method="post" enctype="multipart/form-data">
-    <div class="space-y-4">
-        <div>
-            <label for="course_title" class="block text-white">Course Title</label>
-            <input type="text" id="course_title" name="course_title" value="<?php echo htmlspecialchars($course_data['title']); ?>" class="w-full p-3 border rounded-lg bg-[#34495E] text-white" required>
+
+ <!-- All Courses -->
+ <section>
+  <h2 class="text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">Your All Courses</h2>
+
+  <?php
+  // Ensure the user is logged in
+  if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+  }
+
+  // Fetch the logged-in user ID
+  $user_id = $_SESSION['user_id'];
+
+  // Database connection
+  include('database.php');
+
+  // Get the instructor ID of the logged-in user
+  $query_instructor = "SELECT instructor_id FROM Instructor WHERE user_id = ?";
+  $stmt_instructor = $conn->prepare($query_instructor);
+  $stmt_instructor->bind_param("i", $user_id);
+  $stmt_instructor->execute();
+  $result_instructor = $stmt_instructor->get_result();
+  $instructor = $result_instructor->fetch_assoc();
+
+  if (!$instructor) {
+    echo "No instructor profile found.";
+    exit();
+  }
+
+  $instructor_id = $instructor['instructor_id'];
+
+  // Query to fetch courses with their course_id and video content
+  $sql = "
+  SELECT 
+      Course.course_id,
+      Course.title AS course_title, 
+      Course.description, 
+      Course.category, 
+      Course.price, 
+      Course_Content.file_url 
+  FROM 
+      Course 
+  LEFT JOIN 
+      Course_Content ON Course.course_id = Course_Content.course_id 
+  WHERE 
+      Course_Content.type = 'video' 
+      AND Course.instructor_id = ?";
+  $stmt = $conn->prepare($sql);
+  $stmt->bind_param("i", $instructor_id);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  ?>
+
+  <div class="flex flex-wrap justify-center">
+    <?php
+    if ($result && $result->num_rows > 0) {
+      while ($row = $result->fetch_assoc()) {
+        $course_id = htmlspecialchars($row['course_id']);
+    ?>
+        <div class="card bg-base-100 w-96 shadow-xl m-4">
+          <video class="h-full w-full rounded-lg" controls>
+            <source src="<?php echo htmlspecialchars($row['file_url']); ?>" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div class="card-body">
+            <h2 class="card-title"><?php echo htmlspecialchars($row['course_title']); ?></h2>
+            <p><?php echo htmlspecialchars($row['description']); ?></p>
+            <p>Category: <?php echo htmlspecialchars($row['category']); ?></p>
+            <p>Price: $<?php echo htmlspecialchars($row['price']); ?></p>
+            <p><strong>Course ID:</strong> <?php echo $course_id; ?></p>
+            <div class="flex justify-between mt-4">
+              <!-- Edit Button -->
+              <a href="edit_course.php?course_id=<?php echo $course_id; ?>" class="btn btn-primary w-32">Edit</a>
+              <!-- Delete Button -->
+              <form action="delete_course.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this course?');">
+                <input type="hidden" name="course_id" value="<?php echo $course_id; ?>">
+                <button type="submit" class="btn bg-[red] w-32">Delete</button>
+              </form>
+            </div>
+          </div>
         </div>
+    <?php
+      }
+    } else {
+      echo '<p>No courses available.</p>';
+    }
+    ?>
+  </div>
+</section>
 
-        <div>
-            <label for="course_description" class="block text-white">Course Description</label>
-            <textarea id="course_description" name="course_description" class="w-full p-3 border rounded-lg bg-[#34495E] text-white" rows="4" required><?php echo htmlspecialchars($course_data['description']); ?></textarea>
-        </div>
-
-        <div>
-            <label for="category" class="block text-white">Category</label>
-            <select id="category" name="category" class="w-full p-3 border rounded-lg bg-[#34495E] text-white" required>
-                <option value="Development" <?php echo $course_data['category'] == 'Development' ? 'selected' : ''; ?>>Development</option>
-                <option value="IT and Software" <?php echo $course_data['category'] == 'IT and Software' ? 'selected' : ''; ?>>IT and Software</option>
-                <option value="Design" <?php echo $course_data['category'] == 'Design' ? 'selected' : ''; ?>>Design</option>
-            </select>
-        </div>
-
-        <div>
-            <label for="difficulty" class="block text-white">Difficulty</label>
-            <select id="difficulty" name="difficulty" class="w-full p-3 border rounded-lg bg-[#34495E] text-white" required>
-                <option value="beginner" <?php echo $course_data['difficulty'] == 'beginner' ? 'selected' : ''; ?>>Beginner</option>
-                <option value="intermediate" <?php echo $course_data['difficulty'] == 'intermediate' ? 'selected' : ''; ?>>Intermediate</option>
-                <option value="advanced" <?php echo $course_data['difficulty'] == 'advanced' ? 'selected' : ''; ?>>Advanced</option>
-            </select>
-        </div>
-
-        <div>
-            <label for="price" class="block text-white">Price</label>
-            <input type="number" step="0.01" id="price" name="price" value="<?php echo $course_data['price']; ?>" class="w-full p-3 border rounded-lg bg-[#34495E] text-white" required>
-        </div>
-
-        <div>
-            <label for="status" class="block text-white">Status</label>
-            <select id="status" name="status" class="w-full p-3 border rounded-lg bg-[#34495E] text-white" required>
-                <option value="active" <?php echo $course_data['status'] == 'active' ? 'selected' : ''; ?>>Active</option>
-                <option value="inactive" <?php echo $course_data['status'] == 'inactive' ? 'selected' : ''; ?>>Inactive</option>
-            </select>
-        </div>
-    </div>
-
-    <?php if ($message): ?>
-        <div class="mb-4 p-4 bg-green-100 text-green-700 rounded m-10"><?php echo $message; ?></div>
-    <?php endif; ?>
-
-    <button type="submit" class="w-full mt-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-[black] hover:text-green-400">Update Course</button>
-</form>
-
-    </div>
+    
 </body>
-
 </html>
