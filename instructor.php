@@ -12,6 +12,11 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
 ?>
 
 
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -436,12 +441,143 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
           echo '<p>No students have purchased your courses yet.</p>';
         }
         ?>
+         </div>
     </section>
-    </div>
+   
+
+
+
+
+
+<!-- All comment -->
+
+    
+<section>
+  
+<h2 class="text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Your Reviews</h2>
+
+<?php
+
+
+// Get the logged-in user's ID
+$user_id = $_SESSION['user_id']; // Assuming the logged-in user's ID is stored in session
+
+// Check if the user is an instructor by their role
+$query = "SELECT * FROM User WHERE user_id = $user_id AND role = 'instructor'";
+$result = mysqli_query($conn, $query);
+
+// If the user is an instructor, proceed
+if (mysqli_num_rows($result) > 0) {
+// Get the instructor's courses by joining Course and Instructor tables
+$courses_query = "
+    SELECT c.course_id, c.title, c.category
+    FROM Course c
+    JOIN Instructor i ON c.instructor_id = i.instructor_id
+    WHERE i.user_id = $user_id";
+
+$courses_result = mysqli_query($conn, $courses_query);
+
+// Initialize an empty array to hold course IDs
+$course_ids = [];
+while ($row = mysqli_fetch_assoc($courses_result)) {
+    $course_ids[] = $row['course_id'];  // Add course_id to the array
+}
+
+// If courses exist, fetch reviews for those courses
+if (!empty($course_ids)) {
+    // Convert the array of course IDs to a comma-separated list
+    $course_ids_str = implode(',', $course_ids);
+
+    // Query to fetch reviews for the courses taught by the instructor
+    $reviews_query = "
+        SELECT 
+            r.comment, r.rating, r.review_date, u.firstName, u.lastName, u.email, u.profile_pic, 
+            c.title AS course_title, c.category AS course_category
+        FROM 
+            course_reviews r
+        JOIN 
+            User u ON r.user_id = u.user_id
+        JOIN 
+            Course c ON r.course_id = c.course_id
+        WHERE 
+            r.course_id IN ($course_ids_str)
+        ORDER BY 
+            r.review_date DESC";
+
+    $reviews_result = mysqli_query($conn, $reviews_query);
+}
+} else {
+echo "You are not authorized to view this page.";
+}
+?>
+
+<!-- Display the comments and ratings -->
+<div class="comment-section p-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <?php
+    if (mysqli_num_rows($reviews_result) > 0) {
+        while ($row = mysqli_fetch_assoc($reviews_result)) {
+            $fullName = $row['firstName'] . " " . $row['lastName'];
+            $profilePic = $row['profile_pic'] ? $row['profile_pic'] : 'https://loremflickr.com/320/320/girl'; // Default pic
+            $comment = $row['comment'];
+            $rating = $row['rating'];
+            $courseTitle = $row['course_title'];
+            $courseCategory = $row['course_category'];
+            ?>
+
+            <div class="p-5 border rounded bg-[#283747] shadow-md text-white">
+                <div class="flex items-center">
+                    <img class="w-16 h-16 rounded-full mr-3" src="<?= $profilePic ?>" alt="<?= $fullName ?>">
+                    <div class="text-sm">
+                        <a href="#" class="font-medium leading-none text-white hover:text-indigo-600 transition duration-500 ease-in-out">
+                            <?= $fullName ?>
+                        </a>
+                        <p class="text-white"><?= $row['email'] ?></p>  
+                    </div>
+                </div>
+
+                <!-- Course Name and Category -->
+                <p class="mt-2 text-sm text-white"><strong>Course:</strong> <?= $courseTitle ?></p>
+                <p class="text-sm text-white"><strong>Category:</strong> <?= $courseCategory ?></p>
+
+                <p class="mt-2 text-sm text-white"><?= $comment ?></p>
+
+                <div class="flex mt-4">
+                    <?php
+                    // Display stars based on rating
+                    for ($i = 1; $i <= 5; $i++) {
+                        if ($i <= $rating) {
+                            echo '<svg class="fill-current text-yellow-500" width="24" height="24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>';
+                        } else {
+                            echo '<svg class="fill-current text-gray-300" width="24" height="24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>';
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+            <?php
+        }
+    } else {
+        echo "<p class='text-white'>No reviews yet.</p>";
+    }
+    ?>
+</div>
+</div>
+</section>
+
+
+
 
   </main>
 
+
+  <?php
+  include('footer.php');
+   ?>
+
   <script src="js/script.js"></script>
+
+
 
 </body>
 
