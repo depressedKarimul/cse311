@@ -79,15 +79,15 @@ CREATE TABLE Question (
   FOREIGN KEY (quiz_id) REFERENCES Quiz(quiz_id) ON DELETE CASCADE
 );
 
--- Certificate Table
 CREATE TABLE Certificate (
   certificate_id INT AUTO_INCREMENT PRIMARY KEY,
-  student_id INT,
+  user_id INT,
   course_id INT,
   issue_date DATE,
-  FOREIGN KEY (student_id) REFERENCES Student(student_id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE,
   FOREIGN KEY (course_id) REFERENCES Course(course_id) ON DELETE CASCADE
 );
+
 
 -- Enrollment Table
 CREATE TABLE Enrollment (
