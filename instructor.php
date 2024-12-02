@@ -573,7 +573,102 @@ echo "You are not authorized to view this page.";
 </section>
 
 
+<section>
+  
+<!-- Certified Students -->
 
+
+
+<h2 class="text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">Certified Students</h2>
+
+
+<?php
+// Ensure the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Fetch the logged-in user ID
+$user_id = $_SESSION['user_id'];
+
+// Database connection
+include('database.php');
+
+// Query to fetch certificate holders for the instructor's courses
+$sql = "
+SELECT 
+    User.firstName, 
+    User.lastName, 
+    User.email, 
+    User.profile_pic, 
+    User.bio, 
+    Certificate.issue_date,
+    Course.title
+FROM 
+    Certificate
+JOIN 
+    Course ON Certificate.course_id = Course.course_id
+JOIN 
+    Instructor ON Course.instructor_id = Instructor.instructor_id
+JOIN 
+    User ON Certificate.user_id = User.user_id
+WHERE 
+    Instructor.user_id = ?
+";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+?>
+
+<div class="flex flex-wrap justify-center">
+    <?php
+    $col_count = 0;
+
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $profile_pic = !empty($row['profile_pic']) ? htmlspecialchars($row['profile_pic']) : 'default_profile.jpg';
+            $full_name = htmlspecialchars($row['firstName']) . ' ' . htmlspecialchars($row['lastName']);
+            $bio = htmlspecialchars($row['bio']);
+            $issue_date = htmlspecialchars($row['issue_date']);
+            $course_title = htmlspecialchars($row['title']);
+
+            // Start a new row after every 3 cards
+            if ($col_count % 3 === 0 && $col_count !== 0) {
+                echo '</div><div class="flex flex-wrap justify-center">';
+            }
+    ?>
+            <div class="rounded-lg border bg-[#283747] px-4 pt-8 pb-10 shadow-lg m-4 w-96">
+                <div class="relative mx-auto w-36 rounded-full">
+                    <img class="mx-auto h-auto w-full rounded-full" src="<?php echo $profile_pic; ?>" alt="<?php echo $full_name; ?>" />
+                </div>
+                <h1 class="my-1 text-center text-xl font-bold leading-8 text-white"><?php echo $full_name; ?></h1>
+                <h3 class="font-lg text-semibold text-center leading-6 text-white"><?php echo $bio ?: 'No bio available'; ?></h3>
+                <p class="text-center text-sm leading-6 text-white hover:text-white">Course: <?php echo $course_title; ?></p>
+                <ul class="mt-3 divide-y rounded bg-[#1D232A] py-2 px-3 text-white shadow-sm hover:text-white hover:shadow">
+                    <li class="flex items-center py-3 text-sm">
+                        <span>Email</span>
+                        <span class="ml-auto"><?php echo htmlspecialchars($row['email']); ?></span>
+                    </li>
+                    <li class="flex items-center py-3 text-sm">
+                        <span>Completion Date</span>
+                        <span class="ml-auto"><?php echo date("M d, Y", strtotime($issue_date)); ?></span>
+                    </li>
+                </ul>
+            </div>
+    <?php
+            $col_count++;
+        }
+    } else {
+        echo '<p>No students have received certificates for your courses yet.</p>';
+    }
+    ?>
+</div>
+
+</section>
 
   </main>
 
