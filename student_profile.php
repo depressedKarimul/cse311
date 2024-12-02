@@ -500,7 +500,11 @@ while ($course = $result->fetch_assoc()) {
 
     <!-- Buttons hidden initially -->
     <div class="p-4 hidden" id="buttons_<?php echo $course['course_id']; ?>">
-      <button class="bg-blue-500 text-white px-4 py-2 rounded">Review</button>
+    <a href="review.php?course_id=<?php echo $course['course_id']; ?>" 
+   class="bg-blue-500 text-white px-4 py-2 rounded">
+   Review
+</a>
+
       <button class="bg-green-500 text-white px-4 py-2 rounded">Quiz</button>
     </div>
   </div>

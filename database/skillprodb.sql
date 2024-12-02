@@ -117,16 +117,15 @@ CREATE TABLE Payment (
 -- Review Table
 CREATE TABLE course_reviews (
   review_id INT AUTO_INCREMENT PRIMARY KEY,
-  
   course_id INT,
-  rating INT CHECK (
-    rating BETWEEN 1 AND 5
-  ),
+  user_id INT,
+  rating INT CHECK (rating BETWEEN 1 AND 5),
   comment TEXT,
   review_date DATE,
- 
-  FOREIGN KEY (course_id) REFERENCES Course(course_id) ON DELETE CASCADE
+  FOREIGN KEY (course_id) REFERENCES Course(course_id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
+
 
 -- Admin Table
 CREATE TABLE Admin (

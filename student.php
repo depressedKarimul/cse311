@@ -273,7 +273,11 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
 
 
 <main>
+
+<!-- All Development Courses -->
 <h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Development Courses</h2>
+<section class="lg:ml-32">
+
 <?php
 include('database.php');
 
@@ -468,10 +472,13 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+</section>
 <!-- all design -->
 
 
 <h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Design Courses</h2>
+
+<section class="lg:ml-32">
 <?php
 include('database.php');
 
@@ -665,11 +672,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+</section>
 
 <!-- all IT and Software -->
 
 
 <h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All IT and Software Courses</h2>
+<section class="lg:ml-32">
 <?php
 include('database.php');
 
@@ -863,6 +872,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+</section>
 </main>
 
 <script src="js/script.js"></script>
