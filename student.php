@@ -64,31 +64,58 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
 
           <div class="navbar-end">
             <!-- Search button and input field -->
-            <div class="relative">
-              <button id="search-btn" class="btn btn-ghost btn-circle">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </button>
-              <input
-                id="search-input"
-                type="text"
-                placeholder="Search..."
-                class="hidden absolute right-0 bg-black rounded-md p-2 mt-2"
-                style="width: 150px"
-              />
-            </div>
+           
+  <!-- Search form with button and input field -->
+  <form action="search.php" method="GET" class="relative">
+    <button
+      id="search-btn"
+      type="button"
+      class="btn btn-ghost btn-circle"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        />
+      </svg>
+    </button>
+    <input
+      id="search-input"
+      type="text"
+      name="query"
+      placeholder="Search..."
+      class="hidden absolute right-0 bg-black text-white rounded-md p-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out"
+      style="width: 150px"
+    />
+  </form>
+</div>
+
+<script>
+  // Toggle visibility of the search input when the search button is clicked
+  document.getElementById("search-btn").addEventListener("click", function () {
+    const searchInput = document.getElementById("search-input");
+    searchInput.classList.toggle("hidden");
+    searchInput.focus();
+  });
+
+  // Handle Enter key press for submitting the search form
+  document.getElementById("search-input").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      // Trigger form submission when Enter is pressed
+      event.preventDefault(); // Prevents the default action (form submission if any)
+      document.querySelector("form").submit(); // Manually submit the form
+    }
+  });
+</script>
+
 
             <!-- Notification button -->
             <button class="btn btn-ghost btn-circle">
@@ -115,15 +142,7 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
           </div>
         </div>
 
-        <script>
-          document
-          .getElementById("search-btn")
-            .addEventListener("click", function () {
-              const searchInput = document.getElementById("search-input");
-              searchInput.classList.toggle("hidden");
-              searchInput.focus();
-            });
-        </script>
+       
 
         <div class="navbar relative z-50">
           <div class="navbar-start">

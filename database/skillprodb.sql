@@ -156,3 +156,14 @@ CREATE TABLE Forum_Post (
   FOREIGN KEY (course_id) REFERENCES Course(course_id) ON DELETE CASCADE,
   FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
+
+-- Instructor_Approval Table
+CREATE TABLE Instructor_Approval (
+  approval_id INT AUTO_INCREMENT PRIMARY KEY,
+  admin_id INT,
+  user_id INT,
+  approval_status ENUM('approved', 'rejected', 'pending'),
+  approval_date DATE,
+  FOREIGN KEY (admin_id) REFERENCES Admin(admin_id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
+);
