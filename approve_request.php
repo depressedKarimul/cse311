@@ -15,57 +15,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_id = intval($_POST['user_id']); // Sanitize user ID
     $admin_id = $_SESSION['user_id']; // Assuming admin's user_id is stored in the session
 
-    if ($action === 'approve') {
-        // Approve the instructor request
-        $query = "UPDATE User SET is_approved = 1 WHERE user_id = ?";
-    } elseif ($action === 'reject') {
-        // Reject the instructor request (remove user from the database)
-        $query = "DELETE FROM User WHERE user_id = ?";
-    }
+    // Insert into Instructor_Approval table first
+    $approval_status = ($action === 'approve') ? 'approved' : 'rejected';
+    $approval_date = date('Y-m-d');
+    $approval_query = "INSERT INTO Instructor_Approval (admin_id, user_id, approval_status, approval_date) 
+                       VALUES (?, ?, ?, ?)";
+    $approval_stmt = $conn->prepare($approval_query);
+    $approval_stmt->bind_param("iiss", $admin_id, $user_id, $approval_status, $approval_date);
 
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $user_id);
+    if ($approval_stmt->execute()) {
+        if ($action === 'approve') {
+            // Approve the instructor request
+            $query = "UPDATE User SET is_approved = 1 WHERE user_id = ?";
+        } elseif ($action === 'reject') {
+            // Reject the instructor request (remove user from the database)
+            $query = "DELETE FROM User WHERE user_id = ?";
+        }
 
-    if ($stmt->execute()) {
-        // Insert into Instructor_Approval table
-        $approval_status = ($action === 'approve') ? 'approved' : 'rejected';
-        $approval_date = date('Y-m-d');
-        
-        $approval_query = "INSERT INTO Instructor_Approval (admin_id, user_id, approval_status, approval_date) 
-                           VALUES (?, ?, ?, ?)";
-        $approval_stmt = $conn->prepare($approval_query);
-        $approval_stmt->bind_param("iiss", $admin_id, $user_id, $approval_status, $approval_date);
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $user_id);
 
-        if ($approval_stmt->execute()) {
+        if ($stmt->execute()) {
             $_SESSION['message'] = $action === 'approve' 
                 ? "User has been approved successfully!" 
                 : "User has been rejected successfully!";
         } else {
-            $_SESSION['error'] = "Failed to record approval status. Please try again.";
+            $_SESSION['error'] = "Failed to process the request. Please try again.";
         }
-        
-        $approval_stmt->close();
+
+        $stmt->close();
     } else {
-        $_SESSION['error'] = "Failed to process the request. Please try again.";
+        $_SESSION['error'] = "Failed to record approval status. Please try again.";
     }
 
-    $stmt->close();
+    $approval_stmt->close();
     header('Location: approve_request.php');
     exit;
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Approve Instructor Requests</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <?php include('head_content.php') ?>
 </head>
-<body class="bg-gray-100">
+<body >
     <main class="min-h-screen p-5">
-        <h2 class="text-center text-4xl text-white bg-blue-700 p-5 font-extrabold rounded-md">
+        <h2 class="text-center text-4xl text-white bg-[#283747] p-5 font-extrabold rounded-md">
             Authorize Instructor Requests
         </h2>
 
@@ -139,6 +136,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <?php $conn->close(); ?>
         </div>
+
+
+
+
     </main>
 </body>
 </html>
