@@ -358,219 +358,228 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
 </section>
 
 
-    <!-- purchased courses -->
+<section>
+  <h2 class="text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">Students who have purchased courses</h2>
+  <?php
+  // Ensure the user is logged in
+  if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+  }
 
-    <section>
-      <h2 class="text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">Students who have purchased courses</h2>
-      <?php
+  // Fetch the logged-in user ID
+  $user_id = $_SESSION['user_id'];
 
+  // Database connection
+  include('database.php');
 
+  // Query
+  $sql = "
+    SELECT 
+        User.user_id AS student_id,
+        User.firstName, 
+        User.lastName, 
+        User.email, 
+        User.profile_pic, 
+        User.bio, 
+        Enrollment.enrollment_date,
+        Course.course_id,
+        Course.title
+    FROM 
+        Enrollment 
+    JOIN 
+        Course ON Enrollment.course_id = Course.course_id 
+    JOIN 
+        Instructor ON Course.instructor_id = Instructor.instructor_id 
+    JOIN 
+        User ON Enrollment.user_id = User.user_id 
+    WHERE 
+        Instructor.user_id = ?
+  ";
 
-      // Ensure the user is logged in
-      if (!isset($_SESSION['user_id'])) {
-        header("Location: login.php");
-        exit();
-      }
+  $stmt = $conn->prepare($sql);
+  $stmt->bind_param("i", $user_id);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  ?>
 
-      // Fetch the logged-in user ID
-      $user_id = $_SESSION['user_id'];
+  <div class="flex flex-wrap justify-center">
+    <?php
+    $col_count = 0;
 
-      // Database connection
-      include('database.php');
+    if ($result && $result->num_rows > 0) {
+      while ($row = $result->fetch_assoc()) {
+        $profile_pic = !empty($row['profile_pic']) ? htmlspecialchars($row['profile_pic']) : 'default_profile.jpg';
+        $full_name = htmlspecialchars($row['firstName']) . ' ' . htmlspecialchars($row['lastName']);
+        $bio = htmlspecialchars($row['bio']);
+        $enrollment_date = htmlspecialchars($row['enrollment_date']);
+        $course_title = htmlspecialchars($row['title']);
+        $student_id = $row['student_id']; // student ID for deletion
+        $course_id = $row['course_id']; // course ID for deletion
 
-      // Query
-      $sql = "
-  SELECT 
-      User.firstName, 
-      User.lastName, 
-      User.email, 
-      User.profile_pic, 
-      User.bio, 
-      Enrollment.enrollment_date,
-      Course.title
-  FROM 
-      Enrollment 
-  JOIN 
-      Course ON Enrollment.course_id = Course.course_id 
-  JOIN 
-      Instructor ON Course.instructor_id = Instructor.instructor_id 
-  JOIN 
-      User ON Enrollment.user_id = User.user_id 
-  WHERE 
-      Instructor.user_id = ?
-";
-
-      $stmt = $conn->prepare($sql);
-      $stmt->bind_param("i", $user_id);
-      $stmt->execute();
-      $result = $stmt->get_result();
-
-      ?>
-      <div class="flex flex-wrap justify-center">
-        <?php
-        $col_count = 0;
-
-        if ($result && $result->num_rows > 0) {
-          while ($row = $result->fetch_assoc()) {
-            $profile_pic = !empty($row['profile_pic']) ? htmlspecialchars($row['profile_pic']) : 'default_profile.jpg';
-            $full_name = htmlspecialchars($row['firstName']) . ' ' . htmlspecialchars($row['lastName']);
-            $bio = htmlspecialchars($row['bio']);
-            $enrollment_date = htmlspecialchars($row['enrollment_date']);
-            $course_title = htmlspecialchars($row['title']); // Fetch course title directly
-
-            // Start a new row after every 3 cards
-            if ($col_count % 3 === 0 && $col_count !== 0) {
-              echo '</div><div class="flex flex-wrap justify-center">';
-            }
-        ?>
-            <div class="rounded-lg border bg-[#283747] px-4 pt-8 pb-10 shadow-lg m-4 w-96">
-              <div class="relative mx-auto w-36 rounded-full">
-                <img class="mx-auto h-auto w-full rounded-full" src="<?php echo $profile_pic; ?>" alt="<?php echo $full_name; ?>" />
-              </div>
-              <h1 class="my-1 text-center text-xl font-bold leading-8 text-white"><?php echo $full_name; ?></h1>
-              <h3 class="font-lg text-semibold text-center leading-6 text-white"><?php echo $bio ?: 'No bio available'; ?></h3>
-              <p class="text-center text-sm leading-6 text-white hover:text-white">Course: <?php echo $course_title ?: 'None'; ?></p>
-              <ul class="mt-3 divide-y rounded bg-[#1D232A] py-2 px-3 text-white shadow-sm hover:text-white hover:shadow">
-                <li class="flex items-center py-3 text-sm">
-                  <span>Email</span>
-                  <span class="ml-auto"><?php echo htmlspecialchars($row['email']); ?></span>
-                </li>
-                <li class="flex items-center py-3 text-sm">
-                  <span>Joined On</span>
-                  <span class="ml-auto"><?php echo date("M d, Y", strtotime($enrollment_date)); ?></span>
-                </li>
-              </ul>
-            </div>
-        <?php
-            $col_count++;
-          }
-        } else {
-          echo '<p>No students have purchased your courses yet.</p>';
+        // Start a new row after every 3 cards
+        if ($col_count % 3 === 0 && $col_count !== 0) {
+          echo '</div><div class="flex flex-wrap justify-center">';
         }
-        ?>
-         </div>
-    </section>
-   
+    ?>
+      <div class="rounded-lg border bg-[#283747] px-4 pt-8 pb-10 shadow-lg m-4 w-96">
+        <div class="relative mx-auto w-36 rounded-full">
+          <img class="mx-auto h-auto w-full rounded-full" src="<?php echo $profile_pic; ?>" alt="<?php echo $full_name; ?>" />
+        </div>
+        <h1 class="my-1 text-center text-xl font-bold leading-8 text-white"><?php echo $full_name; ?></h1>
+        <h3 class="font-lg text-semibold text-center leading-6 text-white"><?php echo $bio ?: 'No bio available'; ?></h3>
+        <p class="text-center text-sm leading-6 text-white hover:text-white">Course: <?php echo $course_title ?: 'None'; ?></p>
+        <ul class="mt-3 divide-y rounded bg-[#1D232A] py-2 px-3 text-white shadow-sm hover:text-white hover:shadow">
+          <li class="flex items-center py-3 text-sm">
+            <span>Email</span>
+            <span class="ml-auto"><?php echo htmlspecialchars($row['email']); ?></span>
+          </li>
+          <li class="flex items-center py-3 text-sm">
+            <span>Joined On</span>
+            <span class="ml-auto"><?php echo date("M d, Y", strtotime($enrollment_date)); ?></span>
+          </li>
+        </ul>
 
+        <!-- Delete button form -->
+        <form method="POST" action="delete_student.php" onsubmit="return confirm('Are you sure you want to remove this student?');">
+          <input type="hidden" name="student_id" value="<?php echo $student_id; ?>">
+          <input type="hidden" name="course_id" value="<?php echo $course_id; ?>">
+          <button type="submit" class="mt-4 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-700 transition-all duration-300">
+            Remove from Course
+          </button>
+        </form>
+      </div>
+    <?php
+        $col_count++;
+      }
+    } else {
+      echo '<p>No students have purchased your courses yet.</p>';
+    }
+    ?>
+  </div>
+</section>
 
 
 
 
 <!-- All comment -->
 
-    
 <section>
-  
-<h2 class="text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Your Reviews</h2>
+    <h2 class="text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Your Reviews</h2>
 
-<?php
-
-
-// Get the logged-in user's ID
-$user_id = $_SESSION['user_id']; // Assuming the logged-in user's ID is stored in session
-
-// Check if the user is an instructor by their role
-$query = "SELECT * FROM User WHERE user_id = $user_id AND role = 'instructor'";
-$result = mysqli_query($conn, $query);
-
-// If the user is an instructor, proceed
-if (mysqli_num_rows($result) > 0) {
-// Get the instructor's courses by joining Course and Instructor tables
-$courses_query = "
-    SELECT c.course_id, c.title, c.category
-    FROM Course c
-    JOIN Instructor i ON c.instructor_id = i.instructor_id
-    WHERE i.user_id = $user_id";
-
-$courses_result = mysqli_query($conn, $courses_query);
-
-// Initialize an empty array to hold course IDs
-$course_ids = [];
-while ($row = mysqli_fetch_assoc($courses_result)) {
-    $course_ids[] = $row['course_id'];  // Add course_id to the array
-}
-
-// If courses exist, fetch reviews for those courses
-if (!empty($course_ids)) {
-    // Convert the array of course IDs to a comma-separated list
-    $course_ids_str = implode(',', $course_ids);
-
-    // Query to fetch reviews for the courses taught by the instructor
-    $reviews_query = "
-        SELECT 
-            r.comment, r.rating, r.review_date, u.firstName, u.lastName, u.email, u.profile_pic, 
-            c.title AS course_title, c.category AS course_category
-        FROM 
-            course_reviews r
-        JOIN 
-            User u ON r.user_id = u.user_id
-        JOIN 
-            Course c ON r.course_id = c.course_id
-        WHERE 
-            r.course_id IN ($course_ids_str)
-        ORDER BY 
-            r.review_date DESC";
-
-    $reviews_result = mysqli_query($conn, $reviews_query);
-}
-} else {
-echo "You are not authorized to view this page.";
-}
-?>
-
-<!-- Display the comments and ratings -->
-<div class="comment-section p-4">
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <?php
-    if (mysqli_num_rows($reviews_result) > 0) {
-        while ($row = mysqli_fetch_assoc($reviews_result)) {
-            $fullName = $row['firstName'] . " " . $row['lastName'];
-            $profilePic = $row['profile_pic'] ? $row['profile_pic'] : 'https://loremflickr.com/320/320/girl'; // Default pic
-            $comment = $row['comment'];
-            $rating = $row['rating'];
-            $courseTitle = $row['course_title'];
-            $courseCategory = $row['course_category'];
-            ?>
+    // Get the logged-in user's ID
+    $user_id = $_SESSION['user_id']; // Assuming the logged-in user's ID is stored in session
 
-            <div class="p-5 border rounded bg-[#283747] shadow-md text-white">
-                <div class="flex items-center">
-                    <img class="w-16 h-16 rounded-full mr-3" src="<?= $profilePic ?>" alt="<?= $fullName ?>">
-                    <div class="text-sm">
-                        <a href="#" class="font-medium leading-none text-white hover:text-indigo-600 transition duration-500 ease-in-out">
-                            <?= $fullName ?>
-                        </a>
-                        <p class="text-white"><?= $row['email'] ?></p>  
-                    </div>
-                </div>
+    // Check if the user is an instructor by their role
+    $query = "SELECT * FROM User WHERE user_id = $user_id AND role = 'instructor'";
+    $result = mysqli_query($conn, $query);
 
-                <!-- Course Name and Category -->
-                <p class="mt-2 text-sm text-white"><strong>Course:</strong> <?= $courseTitle ?></p>
-                <p class="text-sm text-white"><strong>Category:</strong> <?= $courseCategory ?></p>
+    // If the user is an instructor, proceed
+    if (mysqli_num_rows($result) > 0) {
+        // Get the instructor's courses by joining Course and Instructor tables
+        $courses_query = "
+            SELECT c.course_id, c.title, c.category
+            FROM Course c
+            JOIN Instructor i ON c.instructor_id = i.instructor_id
+            WHERE i.user_id = $user_id";
 
-                <p class="mt-2 text-sm text-white"><?= $comment ?></p>
+        $courses_result = mysqli_query($conn, $courses_query);
 
-                <div class="flex mt-4">
-                    <?php
-                    // Display stars based on rating
-                    for ($i = 1; $i <= 5; $i++) {
-                        if ($i <= $rating) {
-                            echo '<svg class="fill-current text-yellow-500" width="24" height="24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>';
-                        } else {
-                            echo '<svg class="fill-current text-gray-300" width="24" height="24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>';
-                        }
-                    }
-                    ?>
-                </div>
-            </div>
-            <?php
+        // Initialize an empty array to hold course IDs
+        $course_ids = [];
+        while ($row = mysqli_fetch_assoc($courses_result)) {
+            $course_ids[] = $row['course_id'];  // Add course_id to the array
+        }
+
+        // If courses exist, fetch reviews for those courses
+        if (!empty($course_ids)) {
+            // Convert the array of course IDs to a comma-separated list
+            $course_ids_str = implode(',', $course_ids);
+
+            // Query to fetch reviews for the courses taught by the instructor
+            $reviews_query = "
+                SELECT 
+                    r.review_id, r.comment, r.rating, r.review_date, u.firstName, u.lastName, u.email, u.profile_pic, 
+                    c.title AS course_title, c.category AS course_category
+                FROM 
+                    course_reviews r
+                JOIN 
+                    User u ON r.user_id = u.user_id
+                JOIN 
+                    Course c ON r.course_id = c.course_id
+                WHERE 
+                    r.course_id IN ($course_ids_str)
+                ORDER BY 
+                    r.review_date DESC";
+
+            $reviews_result = mysqli_query($conn, $reviews_query);
         }
     } else {
-        echo "<p class='text-white'>No reviews yet.</p>";
+        echo "You are not authorized to view this page.";
     }
     ?>
-</div>
-</div>
+
+    <!-- Display the comments and ratings -->
+    <div class="comment-section p-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <?php
+            if (mysqli_num_rows($reviews_result) > 0) {
+                while ($row = mysqli_fetch_assoc($reviews_result)) {
+                    $fullName = $row['firstName'] . " " . $row['lastName'];
+                    $profilePic = $row['profile_pic'] ? $row['profile_pic'] : 'https://loremflickr.com/320/320/girl'; // Default pic
+                    $comment = $row['comment'];
+                    $rating = $row['rating'];
+                    $courseTitle = $row['course_title'];
+                    $courseCategory = $row['course_category'];
+                    ?>
+
+                    <div class="p-5 border rounded bg-[#283747] shadow-md text-white">
+                        <div class="flex items-center">
+                            <img class="w-16 h-16 rounded-full mr-3" src="<?= $profilePic ?>" alt="<?= $fullName ?>">
+                            <div class="text-sm">
+                                <a href="#" class="font-medium leading-none text-white hover:text-indigo-600 transition duration-500 ease-in-out">
+                                    <?= $fullName ?>
+                                </a>
+                                <p class="text-white"><?= $row['email'] ?></p>  
+                            </div>
+                        </div>
+
+                        <!-- Course Name and Category -->
+                        <p class="mt-2 text-sm text-white"><strong>Course:</strong> <?= $courseTitle ?></p>
+                        <p class="text-sm text-white"><strong>Category:</strong> <?= $courseCategory ?></p>
+
+                        <p class="mt-2 text-sm text-white"><?= $comment ?></p>
+
+                        <div class="flex mt-4">
+                            <?php
+                            // Display stars based on rating
+                            for ($i = 1; $i <= 5; $i++) {
+                                if ($i <= $rating) {
+                                    echo '<svg class="fill-current text-yellow-500" width="24" height="24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>';
+                                } else {
+                                    echo '<svg class="fill-current text-gray-300" width="24" height="24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>';
+                                }
+                            }
+                            ?>
+                        </div>
+
+                        <!-- Delete Button -->
+                        <form method="POST" action="delete_comment.php" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                            <input type="hidden" name="review_id" value="<?= $row['review_id'] ?>">
+                            <button type="submit" class="mt-4 text-red-500 hover:text-red-700">Delete Comment</button>
+                        </form>
+                    </div>
+                    <?php
+                }
+            } else {
+              echo "<div class='col-span-full text-center text-white text-xl p-10'>No reviews yet.</div>";
+            }
+            ?>
+        </div>
+    </div>
 </section>
+
 
 
 <section>
