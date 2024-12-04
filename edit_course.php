@@ -344,10 +344,11 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
 <a href="course_content_edit.php?course_id=<?php echo $course_id; ?>" class="btn btn-primary w-32">Edit</a>
 
               <!-- Delete Button -->
-              <form action="delete_course.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this course?');">
-                <input type="hidden" name="course_id" value="<?php echo $course_id; ?>">
-                <button type="submit" class="btn bg-[red] w-32">Delete</button>
-              </form>
+              <form action="delete_course2.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this course?');">
+    <input type="hidden" name="course_id" value="<?php echo $course_id; ?>">
+    <button type="submit" class="btn bg-[red] w-32">Delete</button>
+</form>
+
             </div>
           </div>
         </div>

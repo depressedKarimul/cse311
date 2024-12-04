@@ -156,8 +156,7 @@
 </div>
 
 
-
-
+<section>
 <h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Instructors</h2>
 
 <div class="all-instructor mt-6">
@@ -215,6 +214,14 @@ if ($result->num_rows > 0) {
             echo '<p class="text-sm text-gray-400">No courses uploaded.</p>';
         }
 
+        // Delete Instructor Button (Danger Button)
+        echo '<form method="POST" action="delete_instructor.php" onsubmit="return confirm(\'Are you sure you want to delete this instructor?\');">';
+        echo '<input type="hidden" name="user_id" value="' . $user_id . '">';
+        echo '<button type="submit" class="mt-4 bg-red-600 text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-semibold py-2 px-4 rounded-md border border-red-600 transition duration-200 ease-in-out">';
+        echo 'Delete Instructor';
+        echo '</button>';
+        echo '</form>';
+
         echo '</div>';  // Close the instructor card div
         echo '</div>';  // Close the all-instructor div
     }
@@ -229,7 +236,7 @@ $conn->close();
 
 </div>
 
-
+</section>
 
 
 <!-- All Courses -->
@@ -237,8 +244,6 @@ $conn->close();
 <section class="flex justify-center items-center min-h-screen">
 
     <div class="max-w-screen-xl w-full px-4 py-6">
-
-      
 
         <div class="mt-6">
             <?php
@@ -316,6 +321,15 @@ $conn->close();
                         </div>
                     </div>
                 </div>
+
+                <!-- Delete Course Button (Danger Button) -->
+                <form method="POST" action="delete_course.php" onsubmit="return confirm('Are you sure you want to delete this course?');">
+                    <input type="hidden" name="course_id" value="<?php echo $course['course_id']; ?>">
+                    <button type="submit" class="mt-4 ml-5 mb-5 bg-red-600 text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-semibold py-2 px-4 rounded-md border border-red-600 transition duration-200 ease-in-out">
+                        Delete Course
+                    </button>
+                </form>
+
             </div> 
 
             <?php
@@ -339,6 +353,7 @@ $conn->close();
     </div>
 
 </section>
+
 
 
 </main>
