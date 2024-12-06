@@ -1,41 +1,31 @@
 <?php
+// Include the database configuration
+include('database.php');
 session_start();
 
-// Ensure the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
+// Check if the required data is received
+if (isset($_POST['student_id']) && isset($_POST['course_id'])) {
+    $student_id = $_POST['student_id'];
+    $course_id = $_POST['course_id'];
 
-// Database connection
-include('database.php');
+    // Prepare the delete query to remove the student from the course in the Enrollment table
+    $delete_enrollment_query = "
+        DELETE FROM Enrollment 
+        WHERE user_id = '$student_id' AND course_id = '$course_id'
+    ";
 
-// Check if review_id is set
-if (isset($_POST['review_id'])) {
-    $review_id = $_POST['review_id'];
-
-    // Prepare the delete query to delete the comment based on review_id
-    $sql = "DELETE FROM course_reviews WHERE review_id = ?";
-
-    if ($stmt = $conn->prepare($sql)) {
-        // Bind parameter and execute query
-        $stmt->bind_param("i", $review_id);
-        $stmt->execute();
-
-        // Check if the deletion was successful
-        if ($stmt->affected_rows > 0) {
-            echo "<script>alert('Comment deleted successfully.'); window.location.href = 'instructor.php';</script>";
-        } else {
-            echo "<script>alert('Error: Unable to delete the comment.'); window.location.href = 'instructor.php';</script>";
-        }
-
-        $stmt->close();
+    if (mysqli_query($conn, $delete_enrollment_query)) {
+        // Redirect or show a success message
+        $_SESSION['message'] = "Student removed from the course successfully.";
+        header('Location: instructor.php'); // Change to the appropriate page
     } else {
-        echo "<script>alert('Database error.'); window.location.href = 'instructor.php';</script>";
+        // Error message in case of failure
+        $_SESSION['message'] = "Error removing student from course: " . mysqli_error($conn);
+        header('Location: instructor.php'); // Change to the appropriate page
     }
-
-    $conn->close();
 } else {
-    echo "<script>alert('Invalid request.'); window.location.href = 'instructor.php';</script>";
+    // If the required data is not received, redirect with an error message
+    $_SESSION['message'] = "Invalid request.";
+    header('Location: instructor.php'); // Change to the appropriate page
 }
 ?>

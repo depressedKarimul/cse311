@@ -237,8 +237,11 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
             class="hidden absolute right-0 mt-2 w-40 bg-[#021e3b] rounded-md shadow-lg z-10">
             <ul class="py-2 text-sm text-gray-100 h-auto">
               <li>
-                <a href="instructor_profile_edit.php" class="block px-4 py-2 hover:bg-[#01797a]">Profile</a>
+                <a href="instructor_profile.php" class="block px-4 py-2 hover:bg-[#01797a]">Profile</a>
               </li>
+              <!-- <li>
+                <a href="instructor_profile.php" class="block px-4 py-2 hover:bg-[#01797a]">Profile</a>
+              </li> -->
               <li>
                 <a href="Upload_Course.php" class="block px-4 py-2 hover:bg-[#01797a]">Upload Course</a>
               </li>
@@ -274,17 +277,14 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
   </header>
 
   <main>
-
-
- <!-- All Courses -->
+<!-- All Courses -->
 <section>
   <h2 class="text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">Your All Courses</h2>
-
   <?php
   // Ensure the user is logged in
   if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
+      header("Location: login.php");
+      exit();
   }
 
   // Fetch the logged-in user ID
@@ -302,8 +302,8 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
   $instructor = $result_instructor->fetch_assoc();
 
   if (!$instructor) {
-    echo "No instructor profile found.";
-    exit();
+      echo "<p class='text-center text-red-500 mt-5'>No instructor profile found. Please contact the admin for assistance.</p>";
+      exit();
   }
 
   $instructor_id = $instructor['instructor_id'];
@@ -330,32 +330,38 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
   $result = $stmt->get_result();
   ?>
 
-  <div class="flex flex-wrap justify-center">
-    <?php
-    if ($result && $result->num_rows > 0) {
-      while ($row = $result->fetch_assoc()) {
-    ?>
-        <div class="card bg-base-100 w-96 shadow-xl m-4">
-          <video class="h-full w-full rounded-lg" controls>
-            <source src="<?php echo htmlspecialchars($row['file_url']); ?>" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          <div class="card-body">
-            <h2 class="card-title"><?php echo htmlspecialchars($row['course_title']); ?></h2>
-            <p><?php echo htmlspecialchars($row['description']); ?></p>
-            <p>Category: <?php echo htmlspecialchars($row['category']); ?></p>
-            <p>Price: $<?php echo htmlspecialchars($row['price']); ?></p>
-            <p><strong>Course ID:</strong> <?php echo htmlspecialchars($row['course_id']); ?></p>
-          </div>
-        </div>
-    <?php
+  <div class="flex flex-wrap justify-center gap-6 p-6 bg-[#1D232A]">
+      <?php
+      if ($result && $result->num_rows > 0) {
+          while ($row = $result->fetch_assoc()) {
+      ?>
+              <div class="max-w-sm w-full bg-[#283747] border border-gray-600 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                  <!-- Course Video -->
+                  <div class="relative">
+                      <video class="w-full rounded-t-lg" controls>
+                          <source src="<?php echo htmlspecialchars($row['file_url']); ?>" type="video/mp4" />
+                          Your browser does not support the video tag.
+                      </video>
+                  </div>
+                  <!-- Card Body -->
+                  <div class="p-5">
+                      <h2 class="text-xl font-semibold text-white mb-3"><?php echo htmlspecialchars($row['course_title']); ?></h2>
+                      <p class="text-sm text-gray-200 mb-3"><?php echo htmlspecialchars($row['description']); ?></p>
+                      <p class="text-sm text-gray-300"><strong>Category:</strong> <?php echo htmlspecialchars($row['category']); ?></p>
+                      <p class="text-sm text-gray-300"><strong>Price:</strong> $<?php echo htmlspecialchars($row['price']); ?></p>
+                      <p class="text-sm text-gray-300"><strong>Course ID:</strong> <?php echo htmlspecialchars($row['course_id']); ?></p>
+                  </div>
+              </div>
+      <?php
+          }
+      } else {
+          echo '<p class="text-center text-white text-lg">No courses available. Start creating courses now!</p>';
       }
-    } else {
-      echo '<p>No courses available.</p>';
-    }
-    ?>
+      ?>
   </div>
 </section>
+
+
 
 
 <section>
@@ -475,6 +481,9 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
     $query = "SELECT * FROM User WHERE user_id = $user_id AND role = 'instructor'";
     $result = mysqli_query($conn, $query);
 
+    // Initialize reviews_result to avoid undefined variable errors
+    $reviews_result = null;
+
     // If the user is an instructor, proceed
     if (mysqli_num_rows($result) > 0) {
         // Get the instructor's courses by joining Course and Instructor tables
@@ -518,66 +527,68 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
     } else {
         echo "You are not authorized to view this page.";
     }
-    ?>
+?>
 
-    <!-- Display the comments and ratings -->
-    <div class="comment-section p-4">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <?php
-            if (mysqli_num_rows($reviews_result) > 0) {
-                while ($row = mysqli_fetch_assoc($reviews_result)) {
-                    $fullName = $row['firstName'] . " " . $row['lastName'];
-                    $profilePic = $row['profile_pic'] ? $row['profile_pic'] : 'https://loremflickr.com/320/320/girl'; // Default pic
-                    $comment = $row['comment'];
-                    $rating = $row['rating'];
-                    $courseTitle = $row['course_title'];
-                    $courseCategory = $row['course_category'];
-                    ?>
+<!-- Display the comments and ratings -->
+<div class="comment-section p-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <?php
+        // Ensure $reviews_result is valid before accessing it
+        if ($reviews_result && mysqli_num_rows($reviews_result) > 0) {
+            while ($row = mysqli_fetch_assoc($reviews_result)) {
+                $fullName = $row['firstName'] . " " . $row['lastName'];
+                $profilePic = $row['profile_pic'] ? $row['profile_pic'] : 'https://loremflickr.com/320/320/girl'; // Default pic
+                $comment = $row['comment'];
+                $rating = $row['rating'];
+                $courseTitle = $row['course_title'];
+                $courseCategory = $row['course_category'];
+                ?>
 
-                    <div class="p-5 border rounded bg-[#283747] shadow-md text-white">
-                        <div class="flex items-center">
-                            <img class="w-16 h-16 rounded-full mr-3" src="<?= $profilePic ?>" alt="<?= $fullName ?>">
-                            <div class="text-sm">
-                                <a href="#" class="font-medium leading-none text-white hover:text-indigo-600 transition duration-500 ease-in-out">
-                                    <?= $fullName ?>
-                                </a>
-                                <p class="text-white"><?= $row['email'] ?></p>  
-                            </div>
+                <div class="p-5 border rounded bg-[#283747] shadow-md text-white">
+                    <div class="flex items-center">
+                        <img class="w-16 h-16 rounded-full mr-3" src="<?= $profilePic ?>" alt="<?= $fullName ?>">
+                        <div class="text-sm">
+                            <a href="#" class="font-medium leading-none text-white hover:text-indigo-600 transition duration-500 ease-in-out">
+                                <?= $fullName ?>
+                            </a>
+                            <p class="text-white"><?= $row['email'] ?></p>  
                         </div>
-
-                        <!-- Course Name and Category -->
-                        <p class="mt-2 text-sm text-white"><strong>Course:</strong> <?= $courseTitle ?></p>
-                        <p class="text-sm text-white"><strong>Category:</strong> <?= $courseCategory ?></p>
-
-                        <p class="mt-2 text-sm text-white"><?= $comment ?></p>
-
-                        <div class="flex mt-4">
-                            <?php
-                            // Display stars based on rating
-                            for ($i = 1; $i <= 5; $i++) {
-                                if ($i <= $rating) {
-                                    echo '<svg class="fill-current text-yellow-500" width="24" height="24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>';
-                                } else {
-                                    echo '<svg class="fill-current text-gray-300" width="24" height="24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>';
-                                }
-                            }
-                            ?>
-                        </div>
-
-                        <!-- Delete Button -->
-                        <form method="POST" action="delete_comment.php" onsubmit="return confirm('Are you sure you want to delete this comment?');">
-                            <input type="hidden" name="review_id" value="<?= $row['review_id'] ?>">
-                            <button type="submit" class="mt-4 text-red-500 hover:text-red-700">Delete Comment</button>
-                        </form>
                     </div>
-                    <?php
-                }
-            } else {
-              echo "<div class='col-span-full text-center text-white text-xl p-10'>No reviews yet.</div>";
+
+                    <!-- Course Name and Category -->
+                    <p class="mt-2 text-sm text-white"><strong>Course:</strong> <?= $courseTitle ?></p>
+                    <p class="text-sm text-white"><strong>Category:</strong> <?= $courseCategory ?></p>
+
+                    <p class="mt-2 text-sm text-white"><?= $comment ?></p>
+
+                    <div class="flex mt-4">
+                        <?php
+                        // Display stars based on rating
+                        for ($i = 1; $i <= 5; $i++) {
+                            if ($i <= $rating) {
+                                echo '<svg class="fill-current text-yellow-500" width="24" height="24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>';
+                            } else {
+                                echo '<svg class="fill-current text-gray-300" width="24" height="24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>';
+                            }
+                        }
+                        ?>
+                    </div>
+
+                    <!-- Delete Button -->
+                    <form method="POST" action="delete_comment.php" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                        <input type="hidden" name="review_id" value="<?= $row['review_id'] ?>">
+                        <button type="submit" class="mt-4 text-red-500 hover:text-red-700">Delete Comment</button>
+                    </form>
+                </div>
+                <?php
             }
-            ?>
-        </div>
+        } else {
+            echo "<div class='col-span-full text-center text-white text-xl p-10'>No reviews yet.</div>";
+        }
+        ?>
     </div>
+</div>
+
 </section>
 
 

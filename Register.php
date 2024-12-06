@@ -95,6 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -109,6 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     </style>
 </head>
+
 <body class="flex items-center justify-center min-h-screen">
     <div class="w-full max-w-3xl bg-blue-950 bg-opacity-70 border-2 border-white rounded-lg shadow-lg p-8">
         <h2 class="text-3xl font-bold text-center text-white mb-6">User Registration</h2>
@@ -116,12 +118,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div>
                 <label for="firstName" class="block text-white font-medium">First Name</label>
-                <input type="text" name="firstName" id="firstName" 
+                <input type="text" name="firstName" id="firstName"
                     class="w-full px-4 py-3 border border-white bg-transparent text-white rounded-md placeholder-gray-300 focus:outline-none focus:ring focus:ring-white">
             </div>
             <div>
                 <label for="lastName" class="block text-white font-medium">Last Name</label>
-                <input type="text" name="lastName" id="lastName" 
+                <input type="text" name="lastName" id="lastName"
                     class="w-full px-4 py-3 border border-white bg-transparent text-white rounded-md placeholder-gray-300 focus:outline-none focus:ring focus:ring-white">
             </div>
             <div>
@@ -131,17 +133,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div>
                 <label for="password" class="block text-white font-medium">Password</label>
-                <input type="password" name="password" id="password" 
+                <input type="password" name="password" id="password"
                     class="w-full px-4 py-3 border border-white bg-transparent text-white rounded-md placeholder-gray-300 focus:outline-none focus:ring focus:ring-white">
             </div>
             <div>
                 <label for="role" class="block text-white font-medium">Role</label>
-                <select name="role" id="role" 
+                <select name="role" id="role"
                     class="w-full px-4 py-3 border border-white bg-transparent text-white rounded-md focus:outline-none focus:ring focus:ring-white">
                     <option value="" class="bg-gray-900">Select Role</option>
                     <option value="student" class="bg-gray-900">Student</option>
                     <option value="instructor" class="bg-gray-900">Instructor</option>
-                    <option value="admin" class="bg-gray-900">Admin</option>
+
                 </select>
             </div>
             <div>
@@ -179,4 +181,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
     </div>
 </body>
+
 </html>

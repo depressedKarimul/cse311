@@ -10,9 +10,15 @@ $query = "SELECT expertise FROM Instructor WHERE user_id = $user_id";
 $result = mysqli_query($conn, $query);
 
 if ($result && mysqli_num_rows($result) > 0) {
-    // If expertise is already filled, redirect to instructor_profile.php
-    header("Location: instructor_profile.php");
-    exit();
+    // Fetch expertise
+    $row = mysqli_fetch_assoc($result);
+    $expertise = $row['expertise'];
+
+    // If expertise is not NULL or empty, redirect to the instructor profile
+    if (!empty($expertise)) {
+        header("Location: instructor_profile.php");
+        exit();
+    }
 }
 
 // Process form submission for expertise

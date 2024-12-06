@@ -132,53 +132,21 @@
                 tabindex="0"
                 class="menu menu-sm dropdown-content rounded-box z-[1] mt-3 w-52 p-2 shadow bg-black text-white"
               >
-                <li><a>Home</a></li>
+              <li class="mark"><a >Home</a></li>
+              <li>
+                <a href="">Development</a>
+              </li>
+              <li>
+               <a href=""> IT & Software</a>
+              </li>
 
-                <li>
-                  <a>Development</a>
-                  <ul class="p-2 bg-black text-white">
-                    <li><a href="#">Web Development</a></li>
-                    <li><a href="#">Data Science</a></li>
-                    <li><a href="#">Mobile Development</a></li>
-                    <li><a href="#">Programming Languages</a></li>
-                    <li><a href="#">Game Development</a></li>
-                    <li><a href="#">Database Design & Development</a></li>
-                    <li><a href="#">Software Testing</a></li>
-                    <li><a href="#">Software Engineering</a></li>
-                    <li><a href="#">Software Development Tools</a></li>
-                    <li><a href="#">No-Code Development</a></li>
-                  </ul>
-                </li>
+              <li>
+               <a href=""> Design</a>
+                 
+              </li>
 
-                <li>
-                  <a>IT & Software</a>
-                  <ul class="p-2 bg-black text-white">
-                    <li><a href="#">IT Certifications</a></li>
-                    <li><a href="#">Network & Security</a></li>
-                    <li><a href="#">Hardware</a></li>
-                    <li><a href="#">Operating Systems & Servers</a></li>
-                    <li><a href="#">Other IT & Software</a></li>
-                  </ul>
-                </li>
-
-                <li>
-                  <a>Design</a>
-                  <ul class="p-2 bg-black text-white">
-                    <li><a href="#">Web Design</a></li>
-                    <li><a href="#">Graphic Design & Illustration</a></li>
-                    <li><a href="#">Design Tools</a></li>
-                    <li><a href="#">User Experience Design</a></li>
-                    <li><a href="#">Game Design</a></li>
-                    <li><a href="#">3D & Animation</a></li>
-                    <li><a href="#">Fashion Design</a></li>
-                    <li><a href="#">Architectural Design</a></li>
-                    <li><a href="#">Interior Design</a></li>
-                    <li><a href="#">Other Design</a></li>
-                  </ul>
-                </li>
-
-                <li><a>Instructors</a></li>
-                <li><a href="FreeCourses.html">Free Courses</a></li>
+              <li><a>Instructors</a></li>
+              <li><a href="FreeCourses.html">Free Courses</a></li>
                 
               </ul>
             </div>
@@ -223,60 +191,25 @@
             </label>
           </div>
 
+         
+
           <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal px-1">
-              <li><a>Home</a></li>
+            <li class="mark"><a>Home</a></li>
               <li>
-                <details>
-                  <summary>Development</summary>
-                  <ul class="p-2 dropdown">
-                    <li><a href="#">Web Development</a></li>
-                    <li><a href="#">Data Science</a></li>
-                    <li><a href="#">Mobile Development</a></li>
-                    <li><a href="#">Programming Languages</a></li>
-                    <li><a href="#">Game Development</a></li>
-                    <li><a href="#">Database Design & Development</a></li>
-                    <li><a href="#">Software Testing</a></li>
-                    <li><a href="#">Software Engineering</a></li>
-                    <li><a href="#">Software Development Tools</a></li>
-                    <li><a href="#">No-Code Development</a></li>
-                  </ul>
-                </details>
+                <a href="#development">Development</a>
               </li>
               <li>
-                <details>
-                  <summary>IT & Software</summary>
-                  <ul class="p-2 dropdown">
-                    <li><a href="#">IT Certifications</a></li>
-                    <li><a href="#">Network & Security</a></li>
-                    <li><a href="#">Hardware</a></li>
-                    <li><a href="#">Operating Systems & Servers</a></li>
-                    <li><a href="#">Other IT & Software</a></li>
-                  </ul>
-                </details>
+               <a href="#Software"> IT & Software</a>
               </li>
 
               <li>
-                <details>
-                  <summary>Design</summary>
-                  <ul class="p-2 dropdown">
-                    <li><a href="#">Web Design</a></li>
-                    <li><a href="#">Graphic Design & Illustration</a></li>
-                    <li><a href="#">Design Tools</a></li>
-                    <li><a href="#">User Experience Design</a></li>
-                    <li><a href="#">Game Design</a></li>
-                    <li><a href="#">3D & Animation</a></li>
-                    <li><a href="#">Fashion Design</a></li>
-                    <li><a href="#">Architectural Design</a></li>
-                    <li><a href="#">Interior Design</a></li>
-                    <li><a href="#">Other Design</a></li>
-                  </ul>
-                </details>
+               <a href="#Design"> Design</a>
+                 
               </li>
 
               <li><a>Instructors</a></li>
               <li><a href="FreeCourses.html">Free Courses</a></li>
-            </ul>
           </div>
 
           <div class="navbar-end">
@@ -450,15 +383,14 @@
                 <div class="card bg-base-100 w-96 shadow-xl highlight">
                   <figure>
                     <img
-                      src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                      alt="Shoes"
+                      src="https://media.istockphoto.com/id/1370433251/photo/black-woman-sitting-at-desk-using-computer-writing-in-notebook.jpg?s=612x612&w=0&k=20&c=rHpy3cX4LVFtzLI4gyy0T-fNYdTeAcdNQgTmy9maAIA="
                     />
                   </figure>
                   <div class="card-body">
-                    <h2 class="card-title">Shoes!</h2>
-                    <p>If a dog chews shoes whose shoes does he choose?</p>
+                    <h2 class="card-title">Full-Stack Web Development: From Basics to Advanced</h2>
+                    <p>Learn to build dynamic, responsive websites and master both frontend and backend web development in this hands-on course.</p>
                     <div class="card-actions justify-end">
-                      <button class="btn btn-primary">Buy Now</button>
+                      <button class="btn btn-primary"><a href="login.php">Buy Now</a></button>
                     </div>
                   </div>
                 </div>
@@ -694,15 +626,15 @@
                 <div class="card bg-base-100 w-96 shadow-xl">
                   <figure>
                     <img
-                      src="Images/Courses Images/Web devlopment.jpg"
+                      src="https://imageio.forbes.com/specials-images/imageserve/66827d52a65f2b36f9c14f28/Backend-software-developer---flat-design/960x0.jpg?format=jpg&width=960"
                       alt="web development"
                     />
                   </figure>
                   <div class="card-body">
-                    <h2 class="card-title ">Web Development</h2>
-                    <p>Learn web development with MERN, PHP, Laravel, and Django—all in one place</p>
+                    <h2 class="card-title "> Mastering Python Programming for Beginners</h2>
+                    <p>"Learn the fundamentals of Python programming through hands-on projects and real-world applications."</p>
                     <div class="card-actions justify-end">
-                      <button class="btn btn-primary">Buy Now</button>
+                      <button class="btn btn-primary"><a href="login.php">Buy Now</a></button>
                     </div>
                   </div>
                 </div>
@@ -713,15 +645,14 @@
                 <div class="card bg-base-100 w-96 shadow-xl highlight">
                   <figure>
                     <img
-                      src="Images/Courses Images/man-using-tablet-work-connect-with-others.jpg"
-                      alt="Shoes"
+                      src="https://media.licdn.com/dms/image/D5612AQHBD3-lkkqctw/article-cover_image-shrink_720_1280/0/1698037164358?e=2147483647&v=beta&t=wnGTqWJX4Yq0P0JsmpcO2aI5vpzvCUQm_00bJKhNFLs"
                     />
                   </figure>
                   <div class="card-body">
-                    <h2 class="card-title">Data Science</h2>
-                    <p>If a dog chews shoes whose shoes does he choose?</p>
+                    <h2 class="card-title">Cloud Computing Essentials with AWS</h2>
+                    <p>Understand cloud computing principles and gain practical skills in AWS for deploying and managing applications</p>
                     <div class="card-actions justify-end">
-                      <button class="btn btn-primary">Buy Now</button>
+                      <button class="btn btn-primary"><a href="login.php">Buy Now</a></button>
                     </div>
                   </div>
                 </div>
@@ -733,15 +664,14 @@
                 <div class="card bg-base-100 w-96 shadow-xl highlight">
                   <figure>
                     <img
-                      src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                      alt="Shoes"
+                      src="https://miro.medium.com/v2/resize:fit:1400/0*02gGOEknrm2g_GAD.jpg"
                     />
                   </figure>
                   <div class="card-body">
-                    <h2 class="card-title">Shoes!</h2>
-                    <p>If a dog chews shoes whose shoes does he choose?</p>
+                    <h2 class="card-title">Cybersecurity Foundations: Protecting Digital Assets</h2>
+                    <p>Explore core cybersecurity concepts and techniques to protect digital assets from potential threats</p>
                     <div class="card-actions justify-end">
-                      <button class="btn btn-primary">Buy Now</button>
+                      <button class="btn btn-primary"><a href="login.php">Buy Now</a></button>
                     </div>
                   </div>
                 </div>
@@ -978,15 +908,14 @@
                 <div class="card bg-base-100 w-96 shadow-xl">
                   <figure>
                     <img
-                      src="Images/Courses Images/Web devlopment.jpg"
-                      alt="web development"
+                      src="https://www.mindinventory.com/blog/wp-content/uploads/2023/11/difference-between-ui-ux.webp"
                     />
                   </figure>
                   <div class="card-body">
-                    <h2 class="card-title ">Web Development</h2>
-                    <p>Learn web development with MERN, PHP, Laravel, and Django—all in one place</p>
+                    <h2 class="card-title ">UI/UX Design Fundamentals</h2>
+                    <p>Learn the principles of user interface and user experience design to create intuitive and engaging digital products</p>
                     <div class="card-actions justify-end">
-                      <button class="btn btn-primary">Buy Now</button>
+                      <button class="btn btn-primary"><a href="login.php">Buy Now</a></button>
                     </div>
                   </div>
                 </div>
@@ -997,15 +926,14 @@
                 <div class="card bg-base-100 w-96 shadow-xl highlight">
                   <figure>
                     <img
-                      src="Images/Courses Images/man-using-tablet-work-connect-with-others.jpg"
-                      alt="Shoes"
+                      src="https://i.ytimg.com/vi/Ob9RsJRvJek/sddefault.jpg"
                     />
                   </figure>
                   <div class="card-body">
-                    <h2 class="card-title">Data Science</h2>
-                    <p>If a dog chews shoes whose shoes does he choose?</p>
+                    <h2 class="card-title">Advanced Graphic Design with Adobe Creative Suite</h2>
+                    <p>Master Adobe tools like Photoshop, Illustrator, and InDesign to create professional-grade visual designs</p>
                     <div class="card-actions justify-end">
-                      <button class="btn btn-primary">Buy Now</button>
+                      <button class="btn btn-primary"><a href="login.php"></a>Buy Now</button>
                     </div>
                   </div>
                 </div>
@@ -1017,15 +945,15 @@
                 <div class="card bg-base-100 w-96 shadow-xl highlight">
                   <figure>
                     <img
-                      src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                      src="https://i.ytimg.com/vi/i0oWkRv4S78/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAA9fQ6YZtW4ugULzQYyZXybDP9Aw"
                       alt="Shoes"
                     />
                   </figure>
                   <div class="card-body">
-                    <h2 class="card-title">Shoes!</h2>
-                    <p>If a dog chews shoes whose shoes does he choose?</p>
+                    <h2 class="card-title">esponsive Web Design with HTML and CSS</h2>
+                    <p>Gain expertise in designing flexible, mobile-friendly websites using HTML5, CSS3, and modern layout techniques.</p>
                     <div class="card-actions justify-end">
-                      <button class="btn btn-primary">Buy Now</button>
+                      <button class="btn btn-primary"><a href="login.php"></a>Buy Now</button>
                     </div>
                   </div>
                 </div>
@@ -1245,212 +1173,168 @@
       </section>
 
 
-         <!-- Watch Free Webinar title  and description Section -->
-      <section class="text-center m-10 ">
-        <h2 class=" text-5xl font-extrabold">Watch Free Webinar</h2>
-        <p class="font-extralight mt-2">Discover everything you gain by joining our live course.</p>
-      </section>
-      <!-- Watch Free Webinar Section -->
+     <!-- Watch Free Webinar title and description Section -->
+<section class="text-center m-10 ">
+  <h2 class="text-5xl font-extrabold">Watch Free Webinar</h2>
+  <p class="font-extralight mt-2">Discover everything you gain by joining our live course.</p>
+</section>
+<!-- Watch Free Webinar Section -->
 
-      <section class="bg-slate-800 lg:p-10">
+<section class="bg-slate-800 lg:p-10">
+  <div class="grid lg:grid-cols-3 gap-4">
 
-        <div class="grid lg:grid-cols-3 gap-4">
-
-          <!-- card-1 -->
-          <div>
-            <div class="card card-side bg-base-100 shadow-xl highlight">
-              <figure>
-                <img
-                  src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
-                  alt="Movie" />
-              </figure>
-              <div class="card-body">
-                <h2 class="card-title">New movie is released!</h2>
-                <p>Click the button to watch on Jetflix app.</p>
-                <div class="card-actions justify-end">
-                  <button class="btn btn-primary">Watch</button>
-                </div>
-              </div>
-            </div>
-
+    <!-- card-1 -->
+    <div>
+      <div class="card card-side bg-base-100 shadow-xl highlight">
+        <figure>
+          <img src="https://marketplace.canva.com/EAE_V_x3FgA/1/0/1600w/canva-live-webinar-instagram-post-Iofdxu_-4ZQ.jpg" alt="Webinar" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">UI/UX Design Webinar</h2>
+          <p>Join our free webinar to learn the basics of UI/UX design and how it impacts user experience.</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary">Watch</button>
           </div>
-
-          <!-- card-2 -->
-          <div>
-            <div class="card card-side bg-base-100 shadow-xl highlight">
-              <figure>
-                <img
-                  src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
-                  alt="Movie" />
-              </figure>
-              <div class="card-body">
-                <h2 class="card-title">New movie is released!</h2>
-                <p>Click the button to watch on Jetflix app.</p>
-                <div class="card-actions justify-end">
-                  <button class="btn btn-primary">Watch</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-           <!-- card-3 -->
-           <div>
-            <div class="card card-side bg-base-100 shadow-xl highlight">
-              <figure>
-                <img
-                  src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
-                  alt="Movie" />
-              </figure>
-              <div class="card-body">
-                <h2 class="card-title">New movie is released!</h2>
-                <p>Click the button to watch on Jetflix app.</p>
-                <div class="card-actions justify-end">
-                  <button class="btn btn-primary">Watch</button>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-
-            <!-- card-4 -->
-            <div>
-              <div class="card card-side bg-base-100 shadow-xl highlight">
-                <figure>
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
-                    alt="Movie" />
-                </figure>
-                <div class="card-body">
-                  <h2 class="card-title">New movie is released!</h2>
-                  <p>Click the button to watch on Jetflix app.</p>
-                  <div class="card-actions justify-end">
-                    <button class="btn btn-primary">Watch</button>
-                  </div>
-                </div>
-              </div>
-  
-            </div>
-
-             <!-- card-5 -->
-             <div>
-              <div class="card card-side bg-base-100 shadow-xl highlight">
-                <figure>
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
-                    alt="Movie" />
-                </figure>
-                <div class="card-body">
-                  <h2 class="card-title">New movie is released!</h2>
-                  <p>Click the button to watch on Jetflix app.</p>
-                  <div class="card-actions justify-end">
-                    <button class="btn btn-primary">Watch</button>
-                  </div>
-                </div>
-              </div>
-  
-            </div>
-
-
-
-             <!-- card-6 -->
-             <div>
-              <div class="card card-side bg-base-100 shadow-xl highlight">
-                <figure>
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
-                    alt="Movie" />
-                </figure>
-                <div class="card-body">
-                  <h2 class="card-title">New movie is released!</h2>
-                  <p>Click the button to watch on Jetflix app.</p>
-                  <div class="card-actions justify-end">
-                    <button class="btn btn-primary">Watch</button>
-                  </div>
-                </div>
-              </div>
-  
-            </div>
-
-
-
-             <!-- card-7 -->
-             <div>
-              <div class="card card-side bg-base-100 shadow-xl highlight">
-                <figure>
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
-                    alt="Movie" />
-                </figure>
-                <div class="card-body">
-                  <h2 class="card-title">New movie is released!</h2>
-                  <p>Click the button to watch on Jetflix app.</p>
-                  <div class="card-actions justify-end">
-                    <button class="btn btn-primary">Watch</button>
-                  </div>
-                </div>
-              </div>
-  
-            </div>
-
-
-
-             <!-- card-8 -->
-             <div>
-              <div class="card card-side bg-base-100 shadow-xl highlight">
-                <figure>
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
-                    alt="Movie" />
-                </figure>
-                <div class="card-body">
-                  <h2 class="card-title">New movie is released!</h2>
-                  <p>Click the button to watch on Jetflix app.</p>
-                  <div class="card-actions justify-end">
-                    <button class="btn btn-primary">Watch</button>
-                  </div>
-                </div>
-              </div>
-  
-            </div>
-
-
-
-
-             <!-- card-9 -->
-             <div>
-              <div class="card card-side bg-base-100 shadow-xl highlight">
-                <figure>
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
-                    alt="Movie" />
-                </figure>
-                <div class="card-body">
-                  <h2 class="card-title">New movie is released!</h2>
-                  <p>Click the button to watch on Jetflix app.</p>
-                  <div class="card-actions justify-end">
-                    <button class="btn btn-primary">Watch</button>
-                  </div>
-                </div>
-              </div>
-  
-            </div>
-
-          
-
         </div>
+      </div>
+    </div>
 
-      </section>
+    <!-- card-2 -->
+    <div>
+      <div class="card card-side bg-base-100 shadow-xl highlight">
+        <figure>
+          <img src="https://marketplace.canva.com/EAF1cBj-8l8/1/0/1600w/canva-blue-modern-online-webinar-instagram-post-P3Ui26vGrZU.jpg" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">Web Development Fundamentals</h2>
+          <p>Learn the essentials of web development, from HTML to JavaScript, in this free webinar.</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary">Watch</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <!-- card-3 -->
+    <div>
+      <div class="card card-side bg-base-100 shadow-xl highlight">
+        <figure>
+          <img src="https://i0.wp.com/orangevfx.com/wp-content/uploads/2023/03/March-Free-Webinar-Seminar-2023-Orange-VFX-3D-Game-Unreal-Engine-Seminar-Training-Online.jpg?fit=1551%2C1549&ssl=1" alt="Webinar" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">Introduction to Cybersecurity</h2>
+          <p>Explore the world of cybersecurity in this free webinar and learn key strategies for protecting digital assets.</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary">Watch</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-       <!-- Set Career Goal  and description Section -->
-       <section class="text-center m-10 ">
-        <h2 class=" text-5xl font-extrabold">Set Career Goal</h2>
-        
+    <!-- card-4 -->
+    <div>
+      <div class="card card-side bg-base-100 shadow-xl highlight">
+        <figure>
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjEE8q0FEjGyuE730YBogvhMjazZ_hDDUzuPFLE5l88UFV5FEs41sQp5jtOr6KWqGRi9s&usqp=CAU" alt="Webinar" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">Advanced JavaScript Techniques</h2>
+          <p>Master advanced JavaScript concepts and improve your coding skills with this in-depth webinar.</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary">Watch</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <!-- card-5 -->
+    <div>
+      <div class="card card-side bg-base-100 shadow-xl highlight">
+        <figure>
+          <img src="https://img.freepik.com/premium-psd/digital-marketing-webinar-social-media-post-template_539910-278.jpg" alt="Webinar" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">Cloud Computing Essentials</h2>
+          <p>Get started with cloud computing and understand the fundamentals of cloud infrastructure and services.</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary">Watch</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        <p class="font-extralight mt-2">Select your Career Goal from The Options and start learning</p>
-      </section>
+    <!-- card-6 -->
+    <div>
+      <div class="card card-side bg-base-100 shadow-xl highlight">
+        <figure>
+          <img src="https://i.pinimg.com/736x/55/41/b8/5541b8bb6ae4cf90fa33fb3388427842.jpg" alt="Webinar" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">Responsive Web Design</h2>
+          <p>Learn how to create websites that adapt seamlessly to different screen sizes in this free webinar.</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary">Watch</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- card-7 -->
+    <div>
+      <div class="card card-side bg-base-100 shadow-xl highlight">
+        <figure>
+          <img src="https://store.taproot.com/images/thumbs/0001404_free-webinar-most-used-least-effective-cas_550.png" alt="Webinar" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">Introduction to Python</h2>
+          <p>Join us to learn the basics of Python programming and how to build simple applications.</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary">Watch</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- card-8 -->
+    <div>
+      <div class="card card-side bg-base-100 shadow-xl highlight">
+        <figure>
+          <img src="https://digital.excelacademy.my/wp-content/uploads/2023/03/Webinar-AI-Powered-Social-Media-Marketing-24-March-web.png" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">Building Scalable APIs</h2>
+          <p>Learn how to design and build scalable APIs with modern frameworks and technologies.</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary">Watch</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- card-9 -->
+    <div>
+      <div class="card card-side bg-base-100 shadow-xl highlight">
+        <figure>
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7mNCg2N-3ZqEzb-2S6TpNOCgvsrDNTJHGsGhHd2U_bzVdjl6_IqFJ8A1U7qYN_iddQCY&usqp=CAU" alt="Webinar" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">Mastering React.js</h2>
+          <p>Gain a deep understanding of React.js and learn how to build modern, interactive web applications.</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary">Watch</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Set Career Goal and description Section -->
+<section class="text-center m-10 ">
+  <h2 class="text-5xl font-extrabold">Set Career Goal</h2>
+  <p class="font-extralight mt-2">Select your Career Goal from The Options and start learning</p>
+</section>
 
 
       <!-- Set Career Goal section -->
@@ -1621,8 +1505,7 @@
             </div>
             <figure>
               <img
-                src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                alt="Shoes" />
+                src="https://images.stockcake.com/public/2/5/2/2528afc3-9429-470b-8a32-edea706aafc9_large/focused-computer-programmer-stockcake.jpg" />
             </figure>
           </div>
 
@@ -1637,7 +1520,7 @@
             </div>
             <figure>
               <img
-                src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                src="https://t3.ftcdn.net/jpg/08/71/02/34/360_F_871023459_qw2fo1BlgBk45aKC0N9Ll558qexg1nSm.jpg"
                 alt="Shoes" />
             </figure>
           </div>

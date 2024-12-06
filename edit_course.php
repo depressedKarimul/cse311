@@ -45,9 +45,10 @@ $profilePic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'defa
             <ul
               tabindex="0"
               class="menu menu-sm dropdown-content bg-black rounded-box z-[1] mt-3 w-52 p-2 shadow left-0">
-              <li><a>Homepage</a></li>
-              <li><a>Portfolio</a></li>
-              <li><a>About</a></li>
+              <li><a>All Students</a></li>
+              <li><a>All Instructors</a></li>
+              <li><a>All Courses</a></li>
+              <li><a>All Courses</a></li>
             </ul>
           </div>
         </div>

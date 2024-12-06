@@ -29,9 +29,9 @@
       <ul
         tabindex="0"
         class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-        <li><a>Homepage</a></li>
-        <li><a>Portfolio</a></li>
-        <li><a>About</a></li>
+        <li><a href="#students">All Students</a></li>
+    <li><a href="#instructors">All Instructors</a></li>
+    <li><a href="#courses">All Courses</a></li>
       </ul>
     </div>
   </div>
@@ -84,9 +84,9 @@
 
 <main>
 
-<h2 class="text-center text-4xl text-white bg-[#283747] p-5 font-extrabold" >All Students</h2>
+<h2 id="students" class="text-center text-4xl text-white bg-[#283747] p-5 font-extrabold" >All Students</h2>
 
-<div class="all-student mt-6">
+<div  class="all-student mt-6 ">
     <?php
     include("database.php");
 
@@ -122,7 +122,7 @@
             $course_stmt->close();
 
             // Display the student card
-            echo '<div class="bg-[#283747] p-6 shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] w-full max-w-sm rounded-2xl font-[sans-serif] overflow-hidden">';
+            echo '<div class="bg-[#283747] p-6 shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] w-full max-w-sm rounded-2xl font-[sans-serif] overflow-hidden highlight">';
             echo '<div class="flex flex-col items-center">';
             echo '<div class="min-h-[110px]">';
             echo '<img src="' . htmlspecialchars($row["profile_pic"] ?: "default-profile.png") . '" class="w-28 h-w-28 rounded-full" />';
@@ -157,9 +157,9 @@
 
 
 <section>
-<h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Instructors</h2>
+<h2 id="instructors" class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Instructors</h2>
 
-<div class="all-instructor mt-6">
+<div  class="all-instructor mt-6">
 
 <?php
 include("database.php");
@@ -175,9 +175,12 @@ if ($result->num_rows > 0) {
         $user_id = $row['user_id'];
 
         // Fetch uploaded courses for the instructor
-        $course_sql = "SELECT title FROM Course WHERE instructor_id = (
-                            SELECT instructor_id FROM Instructor WHERE user_id = ?
-                        )";
+        $course_sql = "
+            SELECT c.title 
+            FROM Course c
+            JOIN Instructor i ON c.instructor_id = i.instructor_id
+            WHERE i.user_id = ?
+        ";
         $course_stmt = $conn->prepare($course_sql);
         $course_stmt->bind_param("i", $user_id);
         $course_stmt->execute();
@@ -189,7 +192,7 @@ if ($result->num_rows > 0) {
         $course_stmt->close();
 
         // Display the instructor card
-        echo '<div class="bg-[#283747] p-6 shadow-xl w-full max-w-sm rounded-2xl font-sans overflow-hidden">';
+        echo '<div class="bg-[#283747] p-6 shadow-xl w-full max-w-sm rounded-2xl font-sans overflow-hidden highlight">';
         echo '<div class="flex flex-col items-center">';
         echo '<div class="min-h-[110px]">';
         echo '<img src="' . htmlspecialchars($row["profile_pic"] ?: "default-profile.png") . '" class="w-28 h-28 rounded-full border-4 border-white" />';
@@ -234,14 +237,15 @@ if ($result->num_rows > 0) {
 $conn->close();
 ?>
 
+
 </div>
 
 </section>
 
 
 <!-- All Courses -->
-<h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Courses</h2>
-<section class="flex justify-center items-center min-h-screen">
+<h2 id="courses" class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Courses</h2>
+<section  class="flex justify-center items-center min-h-screen">
 
     <div class="max-w-screen-xl w-full px-4 py-6">
 
@@ -280,7 +284,7 @@ $conn->close();
             ?>
 
             <!-- Course card HTML -->
-            <div class="relative flex flex-col my-6 text-white bg-[#283747] shadow-lg border border-slate-200 rounded-lg w-80">
+            <div class="relative flex flex-col my-6 text-white bg-[#283747] shadow-lg border border-slate-200 rounded-lg w-80 highlight">
                 <div class="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
                     <video class="h-full w-full rounded-lg" controls>
                         <!-- Video fetched from Course_Content table -->
@@ -353,6 +357,9 @@ $conn->close();
     </div>
 
 </section>
+
+
+
 
 
 

@@ -1,16 +1,18 @@
 CREATE DATABASE skillProDB;
 
--- User Table
 CREATE TABLE User (
-  user_id INT AUTO_INCREMENT PRIMARY KEY,
-  firstName VARCHAR(50),
-  lastName VARCHAR(50),
-  email VARCHAR(100) UNIQUE,
-  password VARCHAR(255),
-  role ENUM('student', 'instructor', 'admin'),
-  profile_pic VARCHAR(255),
-  bio TEXT
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    firstName VARCHAR(50) NOT NULL,
+    lastName VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('student', 'instructor', 'admin') NOT NULL,
+    profile_pic VARCHAR(255) DEFAULT NULL,
+    bio TEXT DEFAULT NULL,
+    is_approved TINYINT(1) DEFAULT 0, -- 0 for not approved, 1 for approved
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 -- Instructor Table
 CREATE TABLE Instructor (
@@ -167,3 +169,5 @@ CREATE TABLE Instructor_Approval (
   FOREIGN KEY (admin_id) REFERENCES Admin(admin_id) ON DELETE CASCADE,
   FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
+
+

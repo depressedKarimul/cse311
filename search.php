@@ -323,7 +323,7 @@ if (isset($_POST['course_id'])) {
       </nav>
     </header>
 
-    <mian>
+    <main>
       <!-- All search  development course -->
       <section>
       <h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Development Courses</h2>
@@ -453,7 +453,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
       </section>
-
 
 
 
@@ -592,7 +591,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-
 <!-- All IT and Software Courses -->
 <section>
   <h2 class="mt-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All IT and Software Courses</h2>
@@ -723,7 +721,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </section>
 
-
 <!-- All Instructors -->
 <section>
 <h2 class="mt-5 mb-5 text-center text-4xl text-white bg-[#283747] p-5 font-extrabold">All Instructors</h2>
@@ -805,7 +802,8 @@ $conn->close();
 
 
 
-    </mian>
+
+</main>
 
 
 
